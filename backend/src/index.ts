@@ -1,13 +1,20 @@
-import express from 'express';
+import dotenv from "dotenv";
+dotenv.config({
+  path: "./src/.env",
+});
 
-import './database/index'
+import express from "express";
+
+import "./database/index";
+import categoryRoutes from "./routes/category.routes";
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api/categories", categoryRoutes);
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
