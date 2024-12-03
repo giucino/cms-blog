@@ -12,13 +12,13 @@ export class Category extends Model<Category> {
   @Column({
     allowNull: false,
   })
-  name: string = "";
+  name?: string;
 
   @Column({
     allowNull: false,
     unique: true,
   })
-  slug: string = "";
+  slug?: string;
 
   @ForeignKey(() => User)
   @Column({
