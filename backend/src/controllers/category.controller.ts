@@ -20,7 +20,7 @@ export const getCategories = async (req: Request, res: Response) => {
 export const addCategoryController = async (
   req: Request,
   res: Response
-): Promise<void> => {
+) => {
   const schema = z.object({
     name: z.string(),
   });

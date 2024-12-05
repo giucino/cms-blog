@@ -13,6 +13,7 @@ import { User } from "./User";
 import { Comment } from "./Comment";
 import { Tag } from "./Tag";
 import { PostTag } from "./PostTag";
+import { Category } from "./Category";
 
 @Table
 export class Post extends Model<Post> {
@@ -38,8 +39,17 @@ export class Post extends Model<Post> {
   })
   userId?: number;
 
+  @ForeignKey(() => Category)
+  @Column({
+    allowNull: false,
+  })
+  categoryId?: number;
+
   @BelongsTo(() => User)
   user?: User;
+
+  @BelongsTo(() => Category)
+  category?: Category;
 
   @HasMany(() => Comment)
   comments: Comment[] = [];
