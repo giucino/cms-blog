@@ -33,10 +33,10 @@ export const deleteTag = (id: number) => {
   });
 };
 
-export const getTagsByIds = (ids: number[])=>{
-    return Tag.findAll({
-        where:{
-            id: ids 
-        }
-    });
-}
+export const getTagsByIds = (ids: number[]) => {
+  return Tag.findAll({
+    where: {
+      id: ids,
+    },
+  });
+};
