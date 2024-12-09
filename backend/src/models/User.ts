@@ -1,4 +1,11 @@
-import { Column, HasMany, Model, Table } from "sequelize-typescript";
+import {
+  Column,
+  DataType,
+  Default,
+  HasMany,
+  Model,
+  Table,
+} from "sequelize-typescript";
 import { Post } from "./Post";
 import { Comment } from "./Comment";
 import { Token } from "./Token";
@@ -17,6 +24,13 @@ export class User extends Model<User> {
     allowNull: false,
   })
   email?: string;
+
+  @Default("pending")
+  @Column({
+    allowNull: false,
+    type: DataType.ENUM("active", "pending"),
+  })
+  status?: string;
 
   @Column({
     allowNull: false,

@@ -1,10 +1,8 @@
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
-
 dotenv.config({
   path: "./src/.env",
 });
-
 import "express-async-errors";
 import "./database/index";
 import categoryRoutes from "./routes/category.routes";
