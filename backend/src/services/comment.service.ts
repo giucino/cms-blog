@@ -1,7 +1,16 @@
 import { Comment } from "../models/Comment";
+import { User } from "../models/User";
 
 export const getPostComments = async (postId: number) => {
   return Comment.findAll({
+    include: [
+      {
+        model: User,
+        attributes: {
+          exclude: ["password"],
+        },
+      },
+    ],
     where: {
       postId,
     },

@@ -17,10 +17,22 @@ export const getCategories = async (req: Request, res: Response) => {
   res.json(categories);
 };
 
-export const addCategoryController = async (
+export const getCategoryBySlugController = async (
   req: Request,
   res: Response
 ) => {
+  const slug = req.params.slug;
+  const category = await getCategoryBySlug(slug);
+
+  if (!category) {
+    res.status(404).json({ message: "Category not found" });
+    return;
+  }
+
+  res.json(category);
+};
+
+export const addCategoryController = async (req: Request, res: Response) => {
   const schema = z.object({
     name: z.string(),
   });
@@ -87,18 +99,21 @@ export const updateCategoryController = async (
   res.json(updatedCategory);
 };
 
-export const deleteCategoryController = async (req: Request, res: Response): Promise<void> => {
-    const schema = z.object({
-      id: z.number(),
-    });
-  
-    const schemaValidator = schema.safeParse(req.body);
-    if (!schemaValidator.success) {
-      res
-        .status(400)
-        .json({ message: "Invalid data", errors: schemaValidator.error });
-      return;
-    }
+export const deleteCategoryController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const schema = z.object({
+    id: z.number(),
+  });
+
+  const schemaValidator = schema.safeParse(req.body);
+  if (!schemaValidator.success) {
+    res
+      .status(400)
+      .json({ message: "Invalid data", errors: schemaValidator.error });
+    return;
+  }
   const { id } = req.body;
 
   const category = await getCategoryById(id);

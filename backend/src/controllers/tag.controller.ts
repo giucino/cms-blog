@@ -8,6 +8,8 @@ import {
   getTagBySlug,
 } from "../services/tag.service";
 import { generateSlug } from "../shared/general.util";
+import { getPostById } from "../services/post.service";
+import { getPostTags } from "../services/post-tag.service";
 
 export const getTagsController = async (req: Request, res: Response) => {
   const tags = await getAllTags();
@@ -113,4 +115,41 @@ export const deleteTagController = async (req: Request, res: Response) => {
   await deleteTag(id);
 
   res.json(tag);
+};
+
+export const getPostTagsController = async (req: Request, res: Response) => {
+  let postId: any = req.params.postId;
+
+  postId = parseInt(postId);
+
+  if (!postId) {
+    res.status(400).json({ message: "Post id is required" });
+    return;
+  }
+
+  const post = await getPostById(postId);
+
+  if (!post) {
+    res.status(404).json({ message: "Post not found" });
+    return;
+  }
+
+  const postTags = await getPostTags(postId);
+
+  res.json(postTags);
+  return;
+};
+
+export const getTagBySlugController = async (req: Request, res: Response) => {
+  const { slug } = req.params;
+
+  const tag = await getTagBySlug(slug);
+
+  if (!tag) {
+    res.status(404).json({ message: "Tag not found" });
+    return;
+  }
+
+  res.json(tag);
+  return;
 };

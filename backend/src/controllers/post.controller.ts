@@ -11,10 +11,29 @@ import { z } from "zod";
 import { generateSlug } from "../shared/general.util";
 import { getCategoryById } from "../services/category.service";
 import { getTagsByIds } from "../services/tag.service";
-import { addPostTags } from "../services/post-tag.service";
+import { addPostTags, getPostTags } from "../services/post-tag.service";
 
 export const getAllPostsController = async (req: Request, res: Response) => {
-  const posts = await getAllPosts();
+  // zod schema for accepting filters from query string variables
+  const schema = z.object({
+    categoryId: z.string().optional(),
+    tagId: z.string().optional(),
+  });
+
+  // parsing query string variables
+  const safeData = schema.safeParse(req.query);
+
+  if (!safeData.success) {
+    res.status(400).json(safeData.error);
+    return;
+  }
+
+  const { categoryId, tagId } = safeData.data;
+
+  const posts = await getAllPosts({
+    categoryId: categoryId ? parseInt(categoryId) : undefined,
+    tagId: tagId ? parseInt(tagId) : undefined,
+  });
   res.json(posts);
   return;
 };
@@ -36,14 +55,7 @@ export const addPostController = async (req: Request, res: Response) => {
 
   const { title, content, categoryId, tagIds } = safeData.data;
 
-  if (tagIds && tagIds.length > 0) {
-    // check if all tags are valid
-    const tags = await getTagsByIds(tagIds);
-    if (tags.length !== tagIds.length) {
-      res.status(400).json({ message: "Invalid tag id(s)" });
-      return;
-    }
-  }
+  await validateTags(res, tagIds);
 
   let slug = generateSlug(title);
 
@@ -81,9 +93,10 @@ export const updatePostController = async (req: Request, resp: Response) => {
 
   const schema = z.object({
     id: z.number(),
-    title: z.string(),
-    content: z.string(),
-    categoryId: z.number(),
+    title: z.string().optional(),
+    content: z.string().optional(),
+    categoryId: z.number().optional(),
+    tagIds: z.array(z.number()).optional(),
   });
 
   const safeData = schema.safeParse(req.body);
@@ -93,10 +106,13 @@ export const updatePostController = async (req: Request, resp: Response) => {
     return;
   }
 
-  const { id, title, content, categoryId } = safeData.data;
+  let { id, title, content, categoryId, tagIds } = safeData.data;
 
   // checking if post id is valid
   const post = await getPostById(id);
+
+  // check if all tags are valid
+  await validateTags(resp, tagIds);
 
   if (!post) {
     resp.status(400).json({ message: "Invalid post id" });
@@ -112,14 +128,16 @@ export const updatePostController = async (req: Request, resp: Response) => {
   }
 
   // check if category id is valid
-  const category = await getCategoryById(categoryId);
-  if (!category) {
-    resp.status(400).json({ message: "Invalid category id" });
-    return;
+  if (categoryId) {
+    const category = await getCategoryById(categoryId);
+    if (!category) {
+      resp.status(400).json({ message: "Invalid category id" });
+      return;
+    }
   }
   let slug;
   // check if title was updated, if yes, generate new slug
-  if (title !== post.title) {
+  if (title && title !== post.title) {
     slug = generateSlug(title);
 
     // check if slug is unique
@@ -129,6 +147,20 @@ export const updatePostController = async (req: Request, resp: Response) => {
   }
 
   const updatedPost = await updatePost(id, title, content, categoryId, slug);
+
+  const postTagRelations = await getPostTags(id);
+
+  // add tags to post
+  if (tagIds && tagIds.length > 0) {
+    tagIds = tagIds?.filter((tagId) => {
+      const postTag = postTagRelations.find((postTagRelation) => {
+        return postTagRelation.tagId === tagId;
+      });
+      return !postTag;
+    });
+
+    if (tagIds.length > 0) await addPostTags(post.id, tagIds);
+  }
 
   resp.json(updatedPost);
   return;
@@ -170,3 +202,33 @@ export const deletePostController = async (req: Request, resp: Response) => {
   resp.json(post);
   return;
 };
+
+export const getPostBySlugController = async (req: Request, resp: Response) => {
+  const { slug } = req.params;
+
+  if (!slug) {
+    resp.status(400).json({ message: "Invalid slug" });
+    return;
+  }
+
+  const post = await getPostBySlug(slug);
+
+  if (!post) {
+    resp.status(404).json({ message: "Post not found" });
+    return;
+  }
+
+  resp.json(post);
+  return;
+};
+
+async function validateTags(res: Response, tagIds?: number[]) {
+  if (tagIds && tagIds.length > 0) {
+    // check if all tags are valid
+    const tags = await getTagsByIds(tagIds);
+    if (tags.length !== tagIds.length) {
+      res.status(400).json({ message: "Invalid tag id(s)" });
+      return;
+    }
+  }
+}

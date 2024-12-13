@@ -1,16 +1,45 @@
 import { Category } from "../models/Category";
 import { Post } from "../models/Post";
+import { PostTag } from "../models/PostTag";
 import { Tag } from "../models/Tag";
 import { User } from "../models/User";
 
-export const getAllPosts = () => {
+export const getAllPosts = (filters: {
+  categoryId?: number;
+  tagId?: number;
+  userId?: number;
+}) => {
+  let where: any = {};
+
+  if (filters.categoryId) where.categoryId = filters.categoryId;
+
+  if (filters.userId) where.userId = filters.userId;
+
   return Post.findAll({
-    include: [Category, User, Tag],
+    where,
+    include: [
+      Category,
+      {
+        model: User,
+        attributes: {
+          exclude: ["password"],
+        },
+      },
+      {
+        model: Tag,
+        where: filters.tagId
+          ? {
+              id: filters.tagId,
+            }
+          : undefined,
+      },
+    ],
   });
 };
 
 export const getPostBySlug = (slug: string) => {
   return Post.findOne({
+    include: [Category],
     where: {
       slug,
     },
@@ -40,9 +69,9 @@ export const getPostById = (id: number) => {
 
 export const updatePost = async (
   id: number,
-  title: string,
-  content: string,
-  categoryId: number,
+  title?: string,
+  content?: string,
+  categoryId?: number,
   slug?: string
 ) => {
   const post = await getPostById(id);
