@@ -11,5 +11,5 @@ import { AuthService } from '../../../../core/services/auth.service';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-
+  authService = inject(AuthService)
 }

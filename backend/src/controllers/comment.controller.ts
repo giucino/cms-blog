@@ -8,6 +8,7 @@ import {
   getPostComments,
   updateComment,
 } from "../services/comment.service";
+import { User } from "../models/User";
 
 export const getPostCommentsController = async (
   req: Request,
@@ -47,6 +48,8 @@ export const addCommentController = async (req: Request, res: Response) => {
     content: z.string(),
   });
 
+  const user: User = (req as any).user;
+
   const safeData = schema.safeParse(req.body);
   if (!safeData.success) {
     res.status(400).json(safeData.error);
@@ -54,7 +57,7 @@ export const addCommentController = async (req: Request, res: Response) => {
   }
 
   const { postId, content } = safeData.data;
-  const userId = 1; // hardcoded user id
+  const userId = user.get('id'); 
 
   const post = await getPostById(postId);
 

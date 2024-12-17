@@ -11,4 +11,9 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./admin/admin.module').then((m) => m.AdminModule),
   },
+  {
+    path: 'auth',
+    loadChildren: () => import('./public/features/auth/auth.module').then(m => m.AuthModule)
+
+  }
 ];

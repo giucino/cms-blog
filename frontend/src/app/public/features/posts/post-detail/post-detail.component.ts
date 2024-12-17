@@ -7,11 +7,13 @@ import { IPostTag } from '../../../../core/interfaces/models/post-tag.model.inte
 import { TagService } from '../../../../core/services/tag.service';
 import { IComment } from '../../../../core/interfaces/models/comment.model.interface';
 import { CommentService } from '../../../../core/services/comment.service';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-post-detail',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ReactiveFormsModule],
   templateUrl: './post-detail.component.html',
   styleUrl: './post-detail.component.scss',
 })
@@ -22,6 +24,12 @@ export class PostDetailComponent {
   tagsService = inject(TagService);
   postService = inject(PostService);
   commentService = inject(CommentService);
+  authService = inject(AuthService)
+  fb = inject(FormBuilder)
+
+  form = this.fb.group({
+    content: ['']
+  })
 
   post?: IPost;
   postTags: IPostTag[] = [];
@@ -54,5 +62,20 @@ export class PostDetailComponent {
       this.commentService.getComments(this.post.id).subscribe((data) => {
         this.comments = data;
       });
+  }
+
+  submitComment(){
+    this.commentService.createComment(this.form.value.content!, this.post!.id).subscribe({
+      next: () => {
+        this.loadComments();
+        this.form.reset();
+      },
+      error: (err) => {
+        if(err && err.error && err.error.message){
+          alert(err.error.message)
+        }
+        console.error(err);
+      }
+    });
   }
 }

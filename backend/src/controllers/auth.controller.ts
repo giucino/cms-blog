@@ -230,14 +230,14 @@ export const confirmEmailController = async (req: Request, res: Response) => {
 
   await deleteTokens(userId!);
 
-  res.status(200).json({ message: "Email confirmed." });
-  return;
+  res.redirect(
+    process.env.FRONTEND_URL +
+    '/auth/login');
 };
 
 export const forgotPasswordController = async (req: Request, res: Response) => {
   const schema = z.object({
     email: z.string().email(),
-    callbackUrl: z.string().url(),
   });
 
   const parsedData = schema.safeParse(req.body);
@@ -247,7 +247,7 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
     return;
   }
 
-  const { email, callbackUrl } = parsedData.data;
+  const { email } = parsedData.data;
 
   const user = await getUserByEmail(email);
 
@@ -266,7 +266,7 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
   await addToken(token, "reset", user.get("id"));
 
   // Send email
-  await sendForgotPasswordEmail(email, token, callbackUrl);
+  await sendForgotPasswordEmail(email, token);
 
   res.status(200).json({ message: "Email sent." });
   return;

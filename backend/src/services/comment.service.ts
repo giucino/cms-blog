@@ -14,6 +14,7 @@ export const getPostComments = async (postId: number) => {
     where: {
       postId,
     },
+    order: [["createdAt", "DESC"]],
   });
 };
 
