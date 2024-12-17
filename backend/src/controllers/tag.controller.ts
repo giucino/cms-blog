@@ -10,6 +10,7 @@ import {
 import { generateSlug } from "../shared/general.util";
 import { getPostById } from "../services/post.service";
 import { getPostTags } from "../services/post-tag.service";
+import { User } from "../models/User";
 
 export const getTagsController = async (req: Request, res: Response) => {
   const tags = await getAllTags();
@@ -18,6 +19,8 @@ export const getTagsController = async (req: Request, res: Response) => {
 };
 
 export const addTagController = async (req: Request, res: Response) => {
+  const user = (req as any).user as User;
+
   const schema = z.object({
     name: z.string(),
   });
@@ -41,7 +44,7 @@ export const addTagController = async (req: Request, res: Response) => {
     slug = generateSlug(name, true);
   }
 
-  const newTag = await addTag(name, slug, 1);
+  const newTag = await addTag(name, slug, user.get("id"));
 
   res.json(newTag);
   return;
