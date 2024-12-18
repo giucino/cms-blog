@@ -96,7 +96,7 @@ export const loginController = async (req: Request, res: Response) => {
   }
 
   // Generate token
-  const accessToken = generateToken(user.get("id"));
+  const accessToken = generateToken(user.get("id"), '10d');
   const refreshToken = generateToken(user.get("id"), "7d");
 
   // Delete old tokens

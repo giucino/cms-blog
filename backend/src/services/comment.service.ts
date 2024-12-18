@@ -50,3 +50,11 @@ export const deleteComment = async (commentId: number) => {
 
   return comment.destroy();
 };
+
+export const deletePostComments = async (postId: number | number[]) => {
+  return Comment.destroy({
+    where: {
+      postId,
+    },
+  });
+};

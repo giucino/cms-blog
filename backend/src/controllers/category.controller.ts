@@ -10,6 +10,9 @@ import {
 } from "../services/category.service";
 import { generateSlug } from "../shared/general.util";
 import { User } from "../models/User";
+import { deletePost, getAllPosts } from "../services/post.service";
+import { deletePostTagRelations } from "../services/post-tag.service";
+import { deletePostComments } from "../services/comment.service";
 
 export const getCategories = async (req: Request, res: Response) => {
   const categories = await getAllCategories();
@@ -123,6 +126,21 @@ export const deleteCategoryController = async (
   if (!category) {
     res.status(404).json({ message: "Category not found" });
   }
+
+  // getting all posts that belongs to the category
+  const posts = await getAllPosts({
+    categoryId: id,
+  });
+
+  const postIds = posts.map((post) => post.get("id"));
+
+  await deletePostTagRelations({
+    postId: postIds,
+  }); // delete post tag relations
+
+  await deletePostComments(postIds); // delete post comments
+
+  await deletePost(postIds); // delete posts
 
   await deleteCategory(id);
 

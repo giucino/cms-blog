@@ -89,7 +89,7 @@ export const updatePost = async (
   return post.save();
 };
 
-export const deletePost = (id: number) => {
+export const deletePost = (id: number | number[]) => {
   return Post.destroy({
     where: {
       id,

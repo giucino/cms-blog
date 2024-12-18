@@ -1,7 +1,9 @@
 import { Category } from "../models/Category";
 
 export async function getAllCategories() {
-  const categories = await Category.findAll(); // select * from categories
+  const categories = await Category.findAll({
+    order: [["id", "DESC"]],
+  }); // select * from categories
 
   return categories;
 }
