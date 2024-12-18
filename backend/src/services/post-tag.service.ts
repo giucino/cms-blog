@@ -9,15 +9,14 @@ export const addPostTags = async (postId: number, tagIds: number[]) => {
   return await PostTag.bulkCreate(data);
 };
 
-export const getPostTags = async (postId: number)=>{
-
+export const getPostTags = async (postId: number) => {
   return await PostTag.findAll({
-      include:[Tag],
-      where:{
-          postId
-      }
+    include: [Tag],
+    where: {
+      postId,
+    },
   });
-}
+};
 
 export const deletePostTagRelations = async ({
   postId,

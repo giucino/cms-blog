@@ -9,7 +9,10 @@ import {
 } from "../services/tag.service";
 import { generateSlug } from "../shared/general.util";
 import { getPostById } from "../services/post.service";
-import { getPostTags } from "../services/post-tag.service";
+import {
+  deletePostTagRelations,
+  getPostTags,
+} from "../services/post-tag.service";
 import { User } from "../models/User";
 
 export const getTagsController = async (req: Request, res: Response) => {
@@ -114,6 +117,7 @@ export const deleteTagController = async (req: Request, res: Response) => {
     res.status(404).json({ message: "Tag not found" });
     return;
   }
+  await deletePostTagRelations({ tagId: id });
 
   await deleteTag(id);
 
