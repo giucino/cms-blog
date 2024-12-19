@@ -1,7 +1,16 @@
 import { Tag } from "../models/Tag";
 
-export const getAllTags = () => {
-  return Tag.findAll({ order: [["createdAt", "DESC"]] });
+export const getAllTags = (filters?: { userId?: number }) => {
+  const where: any = {};
+  if (filters) {
+    if (filters.userId) {
+      where.userId = filters.userId;
+    }
+  }
+  return Tag.findAll({
+    order: [["createdAt", "DESC"]],
+    where,
+  });
 };
 
 export const addTag = (name: string, slug: string, userId: number) => {

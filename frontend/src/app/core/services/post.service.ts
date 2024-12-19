@@ -32,4 +32,53 @@ export class PostService {
   getPostBySlug(slug: string) {
     return this.httpClient.get<IPost>(`${this.baseUrl}/slug/${slug}`);
   }
+
+  deletePost(id: number) {
+    return this.httpClient.delete(`${this.baseUrl}`, {
+      body: {
+        id,
+      },
+    });
+  }
+
+  addPost({
+    title,
+    content,
+    categoryId,
+    tagIds,
+  }: {
+    title: string;
+    content: string;
+    categoryId: number;
+    tagIds: number[];
+  }) {
+    return this.httpClient.post<IPost>(this.baseUrl, {
+      title,
+      content,
+      categoryId,
+      tagIds,
+    });
+  }
+
+  updatePost({
+    id,
+    title,
+    content,
+    categoryId,
+    tagIds,
+  }: {
+    id: number;
+    title: string;
+    content: string;
+    categoryId: number;
+    tagIds: number[];
+  }) {
+    return this.httpClient.put<IPost>(this.baseUrl, {
+      id,
+      title,
+      content,
+      categoryId,
+      tagIds,
+    });
+  }
 }

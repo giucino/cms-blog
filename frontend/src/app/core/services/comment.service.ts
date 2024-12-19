@@ -5,21 +5,31 @@ import { IComment } from '../interfaces/models/comment.model.interface';
 import { AuthService } from './auth.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommentService {
-
-  baseUrl= environment.BACKEND_API_URL+'/api/comments';
+  baseUrl = environment.BACKEND_API_URL + '/api/comments';
   httpClient = inject(HttpClient);
-  authService = inject(AuthService)
+  authService = inject(AuthService);
 
-  constructor() { }
+  constructor() {}
 
   getComments(postId: number) {
     return this.httpClient.get<IComment[]>(`${this.baseUrl}/${postId}`);
   }
 
   createComment(content: string, postId: number) {
-    return this.httpClient.post<IComment>(`${this.baseUrl}`, { content, postId });
+    return this.httpClient.post<IComment>(`${this.baseUrl}`, {
+      content,
+      postId,
+    });
+  }
+
+  deleteComment(commentId: number) {
+    return this.httpClient.delete<IComment>(`${this.baseUrl}`, {
+      body: {
+        commentId,
+      },
+    });
   }
 }

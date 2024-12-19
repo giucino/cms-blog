@@ -34,6 +34,7 @@ export const getAllPosts = (filters: {
           : undefined,
       },
     ],
+    order: [["createdAt", "DESC"]],
   });
 };
 

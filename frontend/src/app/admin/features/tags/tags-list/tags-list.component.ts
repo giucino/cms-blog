@@ -12,22 +12,32 @@ import { RouterModule } from '@angular/router';
 import { ITag } from '../../../../core/interfaces/models/tag.model.interface';
 import { TagService } from '../../../../core/services/tag.service';
 
-
 @Component({
   selector: 'app-tags-list',
   standalone: true,
   imports: [
-    MatTableModule, MatCheckboxModule, MatButtonModule, MatIcon, RouterModule
+    MatTableModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatIcon,
+    RouterModule,
   ],
   templateUrl: './tags-list.component.html',
-  styleUrl: './tags-list.component.scss'
+  styleUrl: './tags-list.component.scss',
 })
 export class TagsListComponent {
   moment = moment;
-  displayedColumns: string[] = ['select', 'id', 'name', 'createdAt', 'updatedAt', 'actions'];
+  displayedColumns: string[] = [
+    'select',
+    'id',
+    'name',
+    'createdAt',
+    'updatedAt',
+    'actions',
+  ];
   dataSource = new MatTableDataSource<ITag>([]);
   selection = new SelectionModel<ITag>(true, []);
-  tagService = inject(TagService)
+  tagService = inject(TagService);
 
   constructor() {
     this.loadTags();
@@ -59,23 +69,22 @@ export class TagsListComponent {
   }
 
   loadTags() {
-    this.tagService.getTags().subscribe(tags => {
-      this.dataSource.data = tags
+    this.tagService.getTags().subscribe((tags) => {
+      this.dataSource.data = tags;
     });
   }
 
   deleteSelectedTags() {
     const selectedTags = this.selection.selected;
-    const selectedCategoryIds = selectedTags.map(category => category.id);
-    let promises =
-      selectedCategoryIds.map((id) => {
-        let ob = this.tagService.deleteTag(id);
-        // convert into promise
-        return lastValueFrom(ob)
-      });
+    const selectedTagIds = selectedTags.map((category) => category.id);
+    let promises = selectedTagIds.map((id) => {
+      let ob = this.tagService.deleteTag(id);
+      // convert into promise
+      return lastValueFrom(ob);
+    });
 
-      Promise.all(promises).then(()=>{
-        this.loadTags();
-      });
+    Promise.all(promises).then(() => {
+      this.loadTags();
+    });
   }
 }

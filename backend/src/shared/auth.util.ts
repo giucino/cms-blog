@@ -33,6 +33,28 @@ export function authenticateJWT(req: Request, res: Response, next: Function) {
     return;
   }
 
+  authenticateJWT_common(req, res, next, token);
+}
+
+export function authenticateJWTOptional(
+  req: Request,
+  res: Response,
+  next: Function
+) {
+  const token = req.header("Authorization")?.replace("Bearer ", "");
+  authenticateJWT_common(req, res, next, token);
+}
+
+function authenticateJWT_common(
+  req: Request,
+  res: Response,
+  next: Function,
+  token?: string
+) {
+  if (!token) {
+    return next();
+  }
+
   const verified = verifyToken(token);
 
   if (!verified) {

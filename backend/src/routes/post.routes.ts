@@ -6,12 +6,12 @@ import {
   getPostBySlugController,
   updatePostController,
 } from "../controllers/post.controller";
-import { authenticateJWT } from "../shared/auth.util";
+import { authenticateJWT, authenticateJWTOptional } from "../shared/auth.util";
 
 const router = Router();
 
-router.get("/", getAllPostsController);
-router.get('/slug/:slug', getPostBySlugController)
+router.get("/", authenticateJWTOptional, getAllPostsController);
+router.get("/slug/:slug", getPostBySlugController);
 router.post("/", authenticateJWT, addPostController);
 router.put("/", authenticateJWT, updatePostController);
 router.delete("/", authenticateJWT, deletePostController);
