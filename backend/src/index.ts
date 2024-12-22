@@ -48,5 +48,5 @@ app.use((err: Error, req: Request, res: Response, next: any) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+  console.log(`Server listening at ${process.env.BACKEND_URL}`);
 });

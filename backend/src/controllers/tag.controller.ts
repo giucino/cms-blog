@@ -20,7 +20,7 @@ export const getTagsController = async (req: Request, res: Response) => {
   const user = (req as any).user as User;
 
   const tags = await getAllTags({
-    userId: user.get("id"),
+    userId: user?.get("id"),
   });
   res.json(tags);
   return;
