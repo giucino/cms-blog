@@ -12,4 +12,21 @@ import { AuthService } from '../../../../core/services/auth.service';
 })
 export class HeaderComponent {
   authService = inject(AuthService)
+
+  isMenuOpen = false;
+  menuItems = [
+    { path: '/', label: 'Home' },
+    { path: '/about', label: 'About Us' },
+    { path: '/contact', label: 'Contact' }
+  ];
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  isMobileMenuOpen = false;
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
 }

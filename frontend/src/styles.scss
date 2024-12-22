@@ -15,8 +15,12 @@ p {
   @apply text-xl mb-5 leading-loose whitespace-pre-line;
 }
 
-.cta {
-  @apply bg-[var(--primary)] text-white px-4 py-2 rounded-md transition-all duration-200;
+// .cta {
+//   @apply bg-[var(--primary)] text-white px-4 py-2 rounded-md transition-all duration-200;
+// }
+
+.cta{
+    @apply bg-[var(--primary)] text-white px-4 py-2 rounded-md hover:bg-[var(--primary)] transition-all duration-200;
 }
 
 .cta:hover {
@@ -25,3 +29,38 @@ p {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+/* font family */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800&display=swap');
+
+/* icons */
+@import url('https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css');
+
+
+html {
+    @apply relative scroll-smooth;
+}
+
+
+body {
+    @apply text-base overflow-x-hidden text-gray-700;
+}
+
+input,
+textarea,
+button,
+select,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    @apply font-semibold;
+}
