@@ -232,7 +232,7 @@ export const confirmEmailController = async (req: Request, res: Response) => {
 
   res.redirect(
     process.env.FRONTEND_URL +
-    '/auth/login');
+    '#/auth/login');
 };
 
 export const forgotPasswordController = async (req: Request, res: Response) => {
