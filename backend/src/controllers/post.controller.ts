@@ -17,7 +17,7 @@ import {
   getPostTags,
 } from "../services/post-tag.service";
 import { User } from "../models/User";
-import { getTotalCommentsByPostIds } from "../services/comment.service";
+import { deletePostComments, getTotalCommentsByPostIds } from "../services/comment.service";
 
 export const getAllPostsController = async (req: Request, res: Response) => {
   // zod schema for accepting filters from query string variables
@@ -237,6 +237,8 @@ export const deletePostController = async (req: Request, resp: Response) => {
   }
 
   await deletePostTagRelations({ postId: id });
+
+  await deletePostComments(id); // delete post comments
 
   await deletePost(id);
 

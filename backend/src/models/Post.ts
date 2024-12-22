@@ -24,6 +24,7 @@ export class Post extends Model<Post> {
 
   @Column({
     allowNull: false,
+    type: "TEXT",
   })
   content?: string;
 
