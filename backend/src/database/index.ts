@@ -2,7 +2,7 @@ import { connection } from "./connection";
 
 // connection.sync({
 //   force: true,
-//   alter: true,
+// //   alter: true,
 // });
 
 export { connection };
