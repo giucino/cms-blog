@@ -23,7 +23,7 @@ export function sendForgotPasswordEmail(
   const html = `
         <h1>Reset your password</h1>
           <p>Click <a href="${
-          process.env.FRONTEND_URL+'/auth/reset-password'
+          process.env.FRONTEND_URL+'#/auth/reset-password'
         }?token=${token}">here</a> to reset your password</p>
         `;
 

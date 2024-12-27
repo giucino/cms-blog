@@ -3,10 +3,9 @@ import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
-  FormGroup,
   ReactiveFormsModule,
   ValidatorFn,
-  Validators,
+  Validators
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -36,10 +35,27 @@ export class ResetPasswordComponent {
   router = inject(Router);
   authService = inject(AuthService);
   fb = inject(FormBuilder);
+
   form = this.fb.group(
     {
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          //Password must contain at least one uppercase letter, one lowercase letter and one number.
+          Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$'),
+        ],
+      ],
+      confirmPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          //Password must contain at least one uppercase letter, one lowercase letter and one number.
+          Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$'),
+        ],
+      ],
     },
     {
       validators: matchPassword(),
