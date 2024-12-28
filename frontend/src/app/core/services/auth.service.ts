@@ -38,7 +38,6 @@ export class AuthService {
       next: (r) => {
         this.session = r;
         localStorage.setItem('session', JSON.stringify(r));
-        this.router.navigate(['/']);
       },
       error: (e) => {
         // alert('Login failed');

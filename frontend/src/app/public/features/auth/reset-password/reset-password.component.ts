@@ -5,10 +5,12 @@ import {
   FormBuilder,
   ReactiveFormsModule,
   ValidatorFn,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { PasswordToggleDirective } from '../../../shared/directives/password-toggle.directive';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 function matchPassword(): ValidatorFn {
   return (control: AbstractControl) => {
@@ -25,11 +27,18 @@ function matchPassword(): ValidatorFn {
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, RouterModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    ReactiveFormsModule,
+    PasswordToggleDirective,
+    MatProgressBarModule,
+  ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss',
 })
 export class ResetPasswordComponent {
+  isLoading = false;
   token = '';
   route = inject(ActivatedRoute);
   router = inject(Router);
@@ -69,6 +78,7 @@ export class ResetPasswordComponent {
   }
 
   submit() {
+    this.isLoading = true;
     this.authService
       .resetPassword({
         token: this.token,
@@ -84,6 +94,7 @@ export class ResetPasswordComponent {
             alert(err.error.message);
           }
           console.error(err);
+          this.isLoading = false;
         },
       });
   }
