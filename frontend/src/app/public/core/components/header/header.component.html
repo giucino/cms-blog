@@ -20,85 +20,21 @@
 
 
 <!-- ========== Start header ========== -->
-<header class="sticky top-0 py-4 shadow-md bg-gray-100">
-    <div class="container">
-        <div class="flex items-center justify-between flex-wrap lg:flex-nowrap">
-            <div class="w-full lg:w-auto flex flex-shrink items-center justify-between">
-                <!-- Navbar Brand Logo -->
-                <a routerLink="/">
-                    <h2 class="text-2xl font-bold text-gray-950 inline-block z-20">My<span
-                            class="text-blue-500">Blog</span>
-                    </h2>
-                </a>
-
-                <!-- Mobile Menu Toggle Button -->
-                <button class="hs-collapse-toggle lg:hidden inline-block" id="hs-unstyled-collapse"
-                    (click)="toggleMenu()" [attr.aria-expanded]="isMenuOpen" data-hs-collapse="#mobileMenu"
-                    data-hs-type="collapse">
-                    <i class="ti ti-menu-2 text-xl text-gray-500 hover:text-gray-600"
-                        [class.rotate-180]="isMenuOpen"></i>
-                </button>
-            </div>
-
-
-            <div class="flex-grow">
-                <div id="mobileMenu"
-                    class="hs-collapse transition-all duration-300 lg:basis-auto basis-full grow hidden lg:flex items-center justify-end mx-auto mt-2 lg:mt-0 overflow-hidden"
-                    [class.hidden]="!isMenuOpen">
-                    <!-- Navigation Menu -->
-                    <div class="flex lg:flex-row flex-col lg:items-center lg:justify-between w-full gap-5">
-                        <!-- <div class="lg:mx-auto">
-                            <ul class="flex lg:items-center justify-center flex-col lg:flex-row lg:gap-10 gap-2">
-                                @for (item of menuItems; track $index) {
-                                <li
-                                    class="text-base font-semibold text-gray-700 hover:text-blue-500 transition-all duration-500">
-                                    <a [routerLink]="item.path" routerLinkActive="text-blue-500"
-                                        class="inline-flex items-center text-sm lg:text-base font-medium">
-                                        {{item.label}}
-                                    </a>
-                                </li>
-                                }
-
-                            </ul>
-                        </div> -->
-
-                        <div class="flex-shrink flex lg:flex-row flex-col lg:items-center gap-2">
-                            @if(!authService.session) {
-                            <a routerLink="/auth/login"
-                                class="py-1.5 px-6 inline-block text-balance font-semibold rounded-md text-base text-gray-50 border border-gray-700 bg-gray-700 hover:border-gray-950 hover:text-gray-50 hover:bg-gray-950 transition-all duration-500">Login</a>
-
-                            <button routerLink="auth/register"
-                                class="py-1.5 px-6 inline-block text-balance font-semibold rounded-md text-base text-gray-900 border border-gray-700 hover:border-gray-950 hover:text-gray-50 hover:bg-gray-950 transition-all duration-500">Sign
-                                Up</button>
-                            } @else {
-                            <button
-                                class="py-1.5 px-6 inline-block text-balance font-semibold rounded-md text-base text-gray-50 border border-gray-700 bg-gray-700 hover:border-gray-950 hover:text-gray-50 hover:bg-gray-950 transition-all duration-500"
-                                (click)="authService.logout()">Logout</button>
-                            <button
-                                class="py-1.5 px-6 inline-block text-balance font-semibold rounded-md text-base text-gray-50 border border-gray-700 bg-gray-700 hover:border-gray-950 hover:text-gray-50 hover:bg-gray-950 transition-all duration-500"
-                                (click)="authService.adminLogin()">Admin</button>
-                            }
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-<!-- ========== header End ========== -->
-
-
 <header class='flex shadow-md py-4 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative z-50'>
     <div class='flex flex-wrap items-center justify-between gap-5 w-full'>
-        <a href="javascript:void(0)" class="max-sm:hidden"><img src="https://readymadeui.com/readymadeui.svg" alt="logo"
+        <!-- Navbar Brand Logo -->
+        <a routerLink="/">
+            <h2 class="text-2xl font-bold text-gray-950 inline-block z-20">My<span class="text-blue-500">Blog</span>
+            </h2>
+        </a>
+        <!-- <a href="javascript:void(0)" class="max-sm:hidden"><img src="https://readymadeui.com/readymadeui.svg" alt="logo"
                 class='w-36' /></a>
         <a href="javascript:void(0)" class="hidden max-sm:block"><img
-                src="https://readymadeui.com/readymadeui-short.svg" alt="logo" class='w-9' /></a>
+                src="https://readymadeui.com/readymadeui-short.svg" alt="logo" class='w-9' /></a> -->
 
-        <!-- <div id="collapseMenu"
-            class='max-lg:hidden lg:!block max-lg:before:fixed max-lg:before:bg-black max-lg:before:opacity-50 max-lg:before:inset-0 max-lg:before:z-50'>
-            <button id="toggleClose"
+        <div [ngClass]="{'max-lg:hidden': !isMenuOpen}"
+            class='lg:!block max-lg:before:fixed max-lg:before:bg-black max-lg:before:opacity-50 max-lg:before:inset-0 max-lg:before:z-50'>
+            <button (click)="toggleMenu()" type="button" [attr.aria-expanded]="isMenuOpen" aria-controls="mobileMenu"
                 class='lg:hidden fixed top-2 right-4 z-[100] rounded-full bg-white w-9 h-9 flex items-center justify-center border'>
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 fill-black" viewBox="0 0 320.591 320.591">
                     <path
@@ -112,32 +48,19 @@
 
             <ul
                 class='lg:flex gap-x-5 max-lg:space-y-3 max-lg:fixed max-lg:bg-white max-lg:w-1/2 max-lg:min-w-[300px] max-lg:top-0 max-lg:left-0 max-lg:p-6 max-lg:h-full max-lg:shadow-md max-lg:overflow-auto z-50'>
-                <li class='mb-6 hidden max-lg:block'>
+                <!-- <li class='mb-6 hidden max-lg:block'>
                     <a href="javascript:void(0)"><img src="https://readymadeui.com/readymadeui.svg" alt="logo"
                             class='w-36' />
                     </a>
-                </li>
+                </li> -->
+                @for (item of menuItems; track $index) {
                 <li class='max-lg:border-b border-gray-300 max-lg:py-3 px-3'>
-                    <a href='javascript:void(0)'
-                        class='hover:text-[#007bff] text-[#007bff] block font-semibold text-[15px]'>Home</a>
+                    <a [routerLink]="item.path" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }"
+                        class='hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>{{item.label}}</a>
                 </li>
-                <li class='max-lg:border-b border-gray-300 max-lg:py-3 px-3'><a href='javascript:void(0)'
-                        class='hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Team</a>
-                </li>
-                <li class='max-lg:border-b border-gray-300 max-lg:py-3 px-3'><a href='javascript:void(0)'
-                        class='hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Feature</a>
-                </li>
-                <li class='max-lg:border-b border-gray-300 max-lg:py-3 px-3'><a href='javascript:void(0)'
-                        class='hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Blog</a>
-                </li>
-                <li class='max-lg:border-b border-gray-300 max-lg:py-3 px-3'><a href='javascript:void(0)'
-                        class='hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>About</a>
-                </li>
-                <li class='max-lg:border-b border-gray-300 max-lg:py-3 px-3'><a href='javascript:void(0)'
-                        class='hover:text-[#007bff] text-gray-500 block font-semibold text-[15px]'>Contact</a>
-                </li>
+                }
             </ul>
-        </div> -->
+        </div>
 
         <div class='flex max-lg:ml-auto space-x-4'>
             @if(!authService.session) {
@@ -148,7 +71,7 @@
                 up</button>
 
             } @else {
-                <button
+            <button
                 class='px-4 py-2 text-sm rounded-full font-bold text-gray-500 border-2 bg-transparent hover:bg-gray-50 transition-all ease-in-out duration-300'
                 (click)="authService.logout()">Logout</button>
             <button
@@ -156,13 +79,14 @@
                 (click)="authService.adminLogin()">Admin</button>
             }
 
-            <!-- <button id="toggleOpen" class='lg:hidden'>
+            <button (click)="toggleMenu()" type="button" class='lg:hidden'>
                 <svg class="w-7 h-7" fill="#000" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
                         d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
                         clip-rule="evenodd"></path>
                 </svg>
-            </button> -->
+            </button>
         </div>
     </div>
 </header>
+<!-- ========== header End ========== -->

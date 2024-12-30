@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DarkModeService } from '../../../core/services/dark-mode.service';
 import { Observable } from 'rxjs';
-
 
 @Component({
   selector: 'app-auth',
@@ -13,12 +12,12 @@ import { Observable } from 'rxjs';
   styleUrl: './auth.component.scss',
 })
 export class AuthComponent {
-  isDarkMode$: Observable<boolean>;  
+  private darkModeService = inject(DarkModeService);
+  isDarkMode$: Observable<boolean> = this.darkModeService.isDarkMode();
 
-  constructor(private darkModeService: DarkModeService) {
-    this.isDarkMode$ = this.darkModeService.isDarkMode();
-  }
-
+  /**
+   * Toggle the dark mode. This will update the document body class and store the setting in local storage.
+   */
   toggleDarkMode() {
     this.darkModeService.toggleDarkMode();
   }
