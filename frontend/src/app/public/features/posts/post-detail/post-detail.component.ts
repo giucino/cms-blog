@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PostService } from '../../../../core/services/post.service';
 import { IPost } from '../../../../core/interfaces/models/post.model.interface';
@@ -9,6 +9,8 @@ import { IComment } from '../../../../core/interfaces/models/comment.model.inter
 import { CommentService } from '../../../../core/services/comment.service';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../../core/services/auth.service';
+import { FlowbiteService } from '../../../../core/services/flowbite.service';
+
 
 @Component({
   selector: 'app-post-detail',
@@ -17,7 +19,7 @@ import { AuthService } from '../../../../core/services/auth.service';
   templateUrl: './post-detail.component.html',
   styleUrl: './post-detail.component.scss',
 })
-export class PostDetailComponent {
+export class PostDetailComponent implements OnInit {
   moment: any = moment;
 
   route = inject(ActivatedRoute);
@@ -26,6 +28,7 @@ export class PostDetailComponent {
   commentService = inject(CommentService);
   authService = inject(AuthService)
   fb = inject(FormBuilder)
+  // flowbiteService = inject(FlowbiteService)
 
   form = this.fb.group({
     content: ['']
@@ -35,10 +38,14 @@ export class PostDetailComponent {
   postTags: IPostTag[] = [];
   comments: IComment[] = [];
 
-  constructor() {
+  constructor(private flowbiteService: FlowbiteService) {
     this.route.params.subscribe((params) => {
       this.loadPost(params['slug']);
     });
+  }
+
+  ngOnInit(): void {
+    this.flowbiteService.init();
   }
 
   loadPost(slug: string) {

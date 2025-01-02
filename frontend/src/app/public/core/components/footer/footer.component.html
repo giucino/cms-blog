@@ -1,14 +1,22 @@
-<div>
-    <div class="flex container m-auto h-[50px] text-xs justify-between">
+<footer class="shadow p-4 bg-white md:p-8 lg:p-10 dark:bg-gray-800">
+    <div class="flex container m-auto h-[50px] text-xs justify-between bg-white dark:bg-gray-800">
         <div class="flex space-x-6">
-            <div>MyBlog</div>
-            <div>© 2024 MyBlog, LLC</div>
+            <a routerLink="/" class="flex text-2xl font-semibold text-gray-900 dark:text-white">MyBlog</a>
+            <div class="text-s text-gray-500 dark:text-gray-400">© 2024 MyBlog™</div>
         </div>
 
-        <div class="flex space-x-6">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
+        <div class="flex space-x-6 font-semibold text-gray-900 dark:text-white">
+            @for (item of menuItems; track $index) {
+            <a [routerLink]="item.path"
+                routerLinkActive=" text-primary-700 lg:text-primary-700 dark:text-white"
+                [routerLinkActiveOptions]="{exact: true}" [ngClass]="{
+                        'text-gray-700 dark:hover:text-white': !isActive(item.path),
+                        'text-primary-700 lg:text-primary-700': isActive(item.path)
+                        }"
+                class="block py-2 pr-4 pl-3 lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white text-gray-700 ">
+                {{item.label}}
+            </a>
+            }
         </div>
     </div>
-</div>
+</footer>

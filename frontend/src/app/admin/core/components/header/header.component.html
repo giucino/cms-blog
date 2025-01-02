@@ -1,17 +1,17 @@
 <mat-toolbar color="primary" class="flex justify-between">
     <div class="flex items-center">
-        <button mat-icon-button (click)="toggleBtnClicked.emit()" >
+        <button mat-icon-button (click)="toggleBtnClicked.emit()">
             <mat-icon>menu</mat-icon>
         </button>
         <span>My App</span>
     </div>
-   <div>
-   
-    <button mat-icon-button (click)="authService.logout()" >
-        <mat-icon>logout</mat-icon>
-    </button>
-    <button mat-icon-button (click)="authService.adminHome()" >
-        <mat-icon>home</mat-icon>
-    </button>
-   </div>
+    <div>
+
+        <button mat-icon-button (click)="authService.logout()">
+            <mat-icon>logout</mat-icon>
+        </button>
+        <button mat-icon-button (click)="authService.adminHome()">
+            <mat-icon>home</mat-icon>
+        </button>
+    </div>
 </mat-toolbar>
