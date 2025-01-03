@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { PostService } from '../../../../core/services/post.service';
 import { IPost } from '../../../../core/interfaces/models/post.model.interface';
 import moment from 'moment';
+import 'moment/locale/de';
 
 @Component({
   selector: 'app-posts-list',
@@ -21,6 +22,9 @@ export class PostsListComponent implements AfterContentInit {
   posts: IPost[] = [];
   postService = inject(PostService);
 
+  constructor() {
+    moment.locale('de');
+  }
 
   ngAfterContentInit(){
     this.postService.getPosts({

@@ -1,7 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  inject,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
 import moment from 'moment';
 import { IComment } from '../../../../core/interfaces/models/comment.model.interface';
 import { IPostTag } from '../../../../core/interfaces/models/post-tag.model.interface';
@@ -15,11 +21,11 @@ import { TagService } from '../../../../core/services/tag.service';
 @Component({
   selector: 'app-post-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, RouterModule],
   templateUrl: './post-detail.component.html',
   styleUrl: './post-detail.component.scss',
 })
-export class PostDetailComponent implements OnInit {
+export class PostDetailComponent implements OnInit, AfterContentInit {
   moment: any = moment;
 
   route = inject(ActivatedRoute);
@@ -37,13 +43,22 @@ export class PostDetailComponent implements OnInit {
     ],
   });
 
+  @Input() categoryId?: number;
+  @Input() tagId?: number;
+
   post?: IPost;
   postTags: IPostTag[] = [];
   comments: IComment[] = [];
+  posts: IPost[] = [];
+
+  currentSlug?: string; // Variable to store the current slug
+  filteredPosts: any[] = []; // Array to store filtered posts
 
   constructor() {
     this.route.params.subscribe((params) => {
+      this.currentSlug = params['slug']; // store the current slug
       this.loadPost(params['slug']);
+      this.updateFilteredPosts();
     });
   }
 
@@ -113,5 +128,25 @@ export class PostDetailComponent implements OnInit {
 
   isRemoveVisible(commentId: number): boolean {
     return this.dropdownStates[commentId];
+  }
+
+  ngAfterContentInit() {
+    this.postService
+      .getPosts({
+        categoryId: this.categoryId,
+        tagId: this.tagId,
+      })
+      .subscribe((data) => {
+        this.posts = data;
+        this.updateFilteredPosts();
+      });
+  }
+
+  private updateFilteredPosts(): void {
+    if (this.posts) {
+      this.filteredPosts = this.posts.filter(
+        (p) => p.slug !== this.currentSlug
+      );
+    }
   }
 }
