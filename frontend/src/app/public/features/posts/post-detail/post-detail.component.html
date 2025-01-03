@@ -145,31 +145,34 @@
                                     ? moment(comment.createdAt).format('LLL')
                                     : moment(comment.createdAt).fromNow() }}</time></p>
                         </div>
-                        <button *ngIf="!isRemoveVisible(comment.id)"
-                            [attr.id]="'dropdownComment' + comment.id + 'Button'"
-                            [attr.aria-controls]="'dropdownComment' + comment.id"
-                            class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                            type="button" (click)="toggleDropdown(comment.id)">
-                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="currentColor" viewBox="0 0 16 3">
-                                <path
-                                    d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
-                            </svg>
-                            <span class="sr-only">Comment settings</span>
-                        </button>
-                        <!-- Dropdown menu -->
-                        <div [attr.id]="'dropdownComment' + comment.id" [ngClass]="{
+                        @if(authService.session){
+                        <div class="relative inline-block">
+                            <button [attr.id]="'dropdownComment' + comment.id + 'Button'"
+                                [attr.aria-controls]="'dropdownComment' + comment.id"
+                                class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                                type="button" (click)="toggleDropdown(comment.id)">
+                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                    fill="currentColor" viewBox="0 0 16 3">
+                                    <path
+                                        d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
+                                </svg>
+                                <span class="sr-only">Comment settings</span>
+                            </button>
+                            <!-- Dropdown menu -->
+                            <div [attr.id]="'dropdownComment' + comment.id" [ngClass]="{
                             hidden: !dropdownStates[comment.id],
-                            'z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600': true
+                            'absolute mt-3 right-0 z-10 w-24 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600': true
                         }">
-                            <ul class="text-sm text-gray-700 dark:text-gray-200"
-                                [attr.aria-labelledby]="'dropdownComment' + comment.id">
-                                <li>
-                                    <a (click)="deleteComment(comment.id)"
-                                        class="block py-2 px-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove</a>
-                                </li>
-                            </ul>
+                                <ul class="text-sm text-gray-700 dark:text-gray-200"
+                                    [attr.aria-labelledby]="'dropdownComment' + comment.id">
+                                    <li>
+                                        <a (click)="deleteComment(comment.id)"
+                                            class="block py-2 px-4 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
+                        }
                     </footer>
                     <p class="text-gray-500 dark:text-gray-400">{{comment.content}}</p>
                 </article>

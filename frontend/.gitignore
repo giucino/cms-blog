@@ -44,3 +44,4 @@ Thumbs.db
 
 # Frontend
 src/app/public/shared/directives/copypassword-toggle.directive.ts
+src/app/core/services/dark-mode.service.ts

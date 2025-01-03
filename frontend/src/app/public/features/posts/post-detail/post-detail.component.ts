@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import {
   AfterContentInit,
   Component,
+  HostListener,
   inject,
   Input,
-  OnInit,
+  OnInit
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
@@ -53,6 +54,7 @@ export class PostDetailComponent implements OnInit, AfterContentInit {
 
   currentSlug?: string; // Variable to store the current slug
   filteredPosts: any[] = []; // Array to store filtered posts
+  dropdownStates: { [key: number]: boolean } = {};
 
   constructor() {
     this.route.params.subscribe((params) => {
@@ -106,8 +108,6 @@ export class PostDetailComponent implements OnInit, AfterContentInit {
       });
   }
 
-  dropdownStates: { [key: number]: boolean } = {};
-
   toggleDropdown(commentId: number) {
     this.dropdownStates[commentId] = !this.dropdownStates[commentId];
   }
@@ -116,6 +116,7 @@ export class PostDetailComponent implements OnInit, AfterContentInit {
     this.commentService.deleteComment(id).subscribe({
       next: () => {
         this.loadComments();
+        this.dropdownStates[id] = false;
       },
       error: (err) => {
         if (err && err.error && err.error.message) {
@@ -126,8 +127,24 @@ export class PostDetailComponent implements OnInit, AfterContentInit {
     });
   }
 
-  isRemoveVisible(commentId: number): boolean {
-    return this.dropdownStates[commentId];
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const clickedElement = event.target as HTMLElement;
+
+    // Check if the clicked element is not inside any dropdown
+    Object.keys(this.dropdownStates).forEach((id) => {
+      const dropdownButton = document.getElementById(`dropdownComment${id}Button`);
+      const dropdownMenu = document.getElementById(`dropdownComment${id}`);
+
+      if (
+        dropdownButton && 
+        dropdownMenu &&
+        !dropdownButton.contains(clickedElement) &&
+        !dropdownMenu.contains(clickedElement)
+      ) {
+        this.dropdownStates[+id] = false; // Close the dropdown
+      }
+    });
   }
 
   ngAfterContentInit() {

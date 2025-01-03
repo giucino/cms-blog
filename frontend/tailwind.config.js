@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}",
-    "./node_modules/flowbite/**/*.js"
-  ],
+  content: ["./src/**/*.{html,ts}", "./node_modules/flowbite/**/*.js"],
   darkMode: "class",
   theme: {
     extend: {
@@ -23,12 +20,42 @@ module.exports = {
         },
       },
     },
-    plugins: [
-      require('flowbite/plugin')
-    ],
+    plugins: [require("flowbite/plugin")],
   },
   fontFamily: {
-    body: ["Inter"],
-    sans: ["Inter"],
+    body: [
+      "Inter",
+      "ui-sans-serif",
+      "system-ui",
+      "-apple-system",
+      "system-ui",
+      "Segoe UI",
+      "Roboto",
+      "Helvetica Neue",
+      "Arial",
+      "Noto Sans",
+      "sans-serif",
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol",
+      "Noto Color Emoji",
+    ],
+    sans: [
+      "Inter",
+      "ui-sans-serif",
+      "system-ui",
+      "-apple-system",
+      "system-ui",
+      "Segoe UI",
+      "Roboto",
+      "Helvetica Neue",
+      "Arial",
+      "Noto Sans",
+      "sans-serif",
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol",
+      "Noto Color Emoji",
+    ],
   },
 };
