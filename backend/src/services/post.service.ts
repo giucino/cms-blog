@@ -40,7 +40,15 @@ export const getAllPosts = (filters: {
 
 export const getPostBySlug = (slug: string) => {
   return Post.findOne({
-    include: [Category],
+    include: [
+      Category,
+      {
+        model: User,
+        attributes: {
+          exclude: ["password"],
+        },
+      },
+    ],
     where: {
       slug,
     },

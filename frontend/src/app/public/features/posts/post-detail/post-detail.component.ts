@@ -1,21 +1,21 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { PostService } from '../../../../core/services/post.service';
-import { IPost } from '../../../../core/interfaces/models/post.model.interface';
 import moment from 'moment';
-import { IPostTag } from '../../../../core/interfaces/models/post-tag.model.interface';
-import { TagService } from '../../../../core/services/tag.service';
 import { IComment } from '../../../../core/interfaces/models/comment.model.interface';
-import { CommentService } from '../../../../core/services/comment.service';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { IPostTag } from '../../../../core/interfaces/models/post-tag.model.interface';
+import { IPost } from '../../../../core/interfaces/models/post.model.interface';
 import { AuthService } from '../../../../core/services/auth.service';
+import { CommentService } from '../../../../core/services/comment.service';
 import { FlowbiteService } from '../../../../core/services/flowbite.service';
-
+import { PostService } from '../../../../core/services/post.service';
+import { TagService } from '../../../../core/services/tag.service';
 
 @Component({
   selector: 'app-post-detail',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule],
   templateUrl: './post-detail.component.html',
   styleUrl: './post-detail.component.scss',
 })
@@ -26,19 +26,22 @@ export class PostDetailComponent implements OnInit {
   tagsService = inject(TagService);
   postService = inject(PostService);
   commentService = inject(CommentService);
-  authService = inject(AuthService)
-  fb = inject(FormBuilder)
-  // flowbiteService = inject(FlowbiteService)
+  authService = inject(AuthService);
+  fb = inject(FormBuilder);
+  flowbiteService = inject(FlowbiteService);
 
   form = this.fb.group({
-    content: ['']
-  })
+    content: [
+      '',
+      [Validators.required, Validators.minLength(1), Validators.pattern(/\S/)],
+    ],
+  });
 
   post?: IPost;
   postTags: IPostTag[] = [];
   comments: IComment[] = [];
 
-  constructor(private flowbiteService: FlowbiteService) {
+  constructor() {
     this.route.params.subscribe((params) => {
       this.loadPost(params['slug']);
     });
@@ -71,18 +74,44 @@ export class PostDetailComponent implements OnInit {
       });
   }
 
-  submitComment(){
-    this.commentService.createComment(this.form.value.content!, this.post!.id).subscribe({
+  submitComment() {
+    this.commentService
+      .createComment(this.form.value.content!, this.post!.id)
+      .subscribe({
+        next: () => {
+          this.loadComments();
+          this.form.reset();
+        },
+        error: (err) => {
+          if (err && err.error && err.error.message) {
+            alert(err.error.message);
+          }
+          console.error(err);
+        },
+      });
+  }
+
+  dropdownStates: { [key: number]: boolean } = {};
+
+  toggleDropdown(commentId: number) {
+    this.dropdownStates[commentId] = !this.dropdownStates[commentId];
+  }
+
+  deleteComment(id: number) {
+    this.commentService.deleteComment(id).subscribe({
       next: () => {
         this.loadComments();
-        this.form.reset();
       },
       error: (err) => {
-        if(err && err.error && err.error.message){
-          alert(err.error.message)
+        if (err && err.error && err.error.message) {
+          alert(err.error.message);
         }
         console.error(err);
-      }
+      },
     });
+  }
+
+  isRemoveVisible(commentId: number): boolean {
+    return this.dropdownStates[commentId];
   }
 }

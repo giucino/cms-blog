@@ -8,7 +8,7 @@ export interface IPost{
     content: string;
     slug: string;
     userId: string;
-    user: IUser
+    user: IUser;
     categoryId: number;
     totalComments?: number;
     category: ICategory;
