@@ -44,7 +44,9 @@ export class PostsListComponent {
   postService = inject(PostService);
 
   constructor() {
-    this.loadPosts();
+    this.loadAdminPosts();
+
+    // this.loadPosts();
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -72,9 +74,29 @@ export class PostsListComponent {
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} `;
   }
 
-  loadPosts() {
-    this.postService.getPosts({}).subscribe((tags) => {
-      this.dataSource.data = tags;
+  // loadPosts() {
+  //   this.postService.getPosts({}).subscribe((tags) => {
+  //     this.dataSource.data = tags;
+  //   });
+  // }
+
+  // ngOnInit() {
+  //   this.loadAdminPosts();
+  // }
+  
+  loadAdminPosts() {
+    this.postService.getAdminPosts({}).subscribe({
+      next: (posts) => {
+        this.dataSource.data = posts;
+      },
+      error: (error) => {
+        console.error('Error loading admin posts:', error);
+        // Hier können Sie eine Fehlerbehandlung hinzufügen
+      },
+      complete: () => {
+        // Optional: Hier können Sie Aktionen definieren, die nach Abschluss des Observables ausgeführt werden sollen
+        console.log('Admin posts loading completed');
+      },
     });
   }
 
@@ -88,7 +110,7 @@ export class PostsListComponent {
     });
 
     Promise.all(promises).then(() => {
-      this.loadPosts();
+      this.loadAdminPosts();
     });
   }
 }

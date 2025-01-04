@@ -1,8 +1,74 @@
 import { Category } from "../models/Category";
 import { Post } from "../models/Post";
-import { PostTag } from "../models/PostTag";
 import { Tag } from "../models/Tag";
 import { User } from "../models/User";
+
+// Funktion für den öffentlichen Bereich
+// export const getAllPublicPosts = (filters: {
+//   categoryId?: number;
+//   tagId?: number;
+// }) => {
+//   let where: any = {};
+
+//   if (filters.categoryId) where.categoryId = filters.categoryId;
+
+//   return Post.findAll({
+//     where,
+//     include: [
+//       Category,
+//       {
+//         model: User,
+//         attributes: {
+//           exclude: ["password"],
+//         },
+//       },
+//       {
+//         model: Tag,
+//         where: filters.tagId
+//           ? {
+//               id: filters.tagId,
+//             }
+//           : undefined,
+//       },
+//     ],
+//     order: [["createdAt", "DESC"]],
+//   });
+// };
+
+// Funktion für den Adminbereich
+// export const getAdminPosts = (filters: {
+//   categoryId?: number;
+//   tagId?: number;
+//   userId: number;
+// }) => {
+//   let where: any = {
+//     userId: filters.userId, // Immer nach dem eingeloggten Admin filtern
+//   };
+
+//   if (filters.categoryId) where.categoryId = filters.categoryId;
+
+//   return Post.findAll({
+//     where,
+//     include: [
+//       Category,
+//       {
+//         model: User,
+//         attributes: {
+//           exclude: ["password"],
+//         },
+//       },
+//       {
+//         model: Tag,
+//         where: filters.tagId
+//           ? {
+//               id: filters.tagId,
+//             }
+//           : undefined,
+//       },
+//     ],
+//     order: [["createdAt", "DESC"]],
+//   });
+// };
 
 export const getAllPosts = (filters: {
   categoryId?: number;

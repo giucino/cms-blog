@@ -2,7 +2,9 @@ import { Request, Response } from "express";
 import {
   addPost,
   deletePost,
+  // getAdminPosts,
   getAllPosts,
+  // getAllPublicPosts,
   getPostById,
   getPostBySlug,
   updatePost,
@@ -19,17 +21,13 @@ import {
 import { User } from "../models/User";
 import { deletePostComments, getTotalCommentsByPostIds } from "../services/comment.service";
 
-export const getAllPostsController = async (req: Request, res: Response) => {
-  // zod schema for accepting filters from query string variables
+// Controller für den öffentlichen Bereich
+export const getPublicPostsController = async (req: Request, res: Response) => {
   const schema = z.object({
     categoryId: z.string().optional(),
     tagId: z.string().optional(),
   });
 
-  // get user from req
-  const user = (req as any).user as User;
-
-  // parsing query string variables
   const safeData = schema.safeParse(req.query);
 
   if (!safeData.success) {
@@ -42,7 +40,6 @@ export const getAllPostsController = async (req: Request, res: Response) => {
   const posts = await getAllPosts({
     categoryId: categoryId ? parseInt(categoryId) : undefined,
     tagId: tagId ? parseInt(tagId) : undefined,
-    userId: user?.get("id"),
   });
 
   let postIds = posts.map((post) => post.id);
@@ -64,6 +61,94 @@ export const getAllPostsController = async (req: Request, res: Response) => {
   res.json(postsWithTotalComments);
   return;
 };
+
+// Controller für den Adminbereich
+export const getAdminPostsController = async (req: Request, res: Response) => {
+  const schema = z.object({
+    categoryId: z.string().optional(),
+    tagId: z.string().optional(),
+  });
+
+  const user = (req as any).user as User;
+
+  const safeData = schema.safeParse(req.query);
+
+  if (!safeData.success) {
+    res.status(400).json(safeData.error);
+    return;
+  }
+
+  const { categoryId, tagId } = safeData.data;
+
+  const posts = await getAllPosts({
+    categoryId: categoryId ? parseInt(categoryId) : undefined,
+    tagId: tagId ? parseInt(tagId) : undefined,
+    userId: user.get("id"),
+  });
+
+  let postIds = posts.map((post) => post.id);
+
+  const totalCommentsByPostIds = await getTotalCommentsByPostIds(postIds);
+
+  // adding total comments to each post
+  const postsWithTotalComments = posts.map((post) => {
+    const totalComments = totalCommentsByPostIds.find(
+      (totalCommentsByPostId) => totalCommentsByPostId.postId === post.id
+    );
+
+    return {
+      ...post.toJSON(),
+      totalComments: totalComments?.get("totalComments") || 0,
+    };
+  });
+
+  res.json(postsWithTotalComments);
+  return;
+
+};
+
+// export const getAllPostsController = async (req: Request, res: Response) => {
+//   const schema = z.object({
+//     categoryId: z.string().optional(),
+//     tagId: z.string().optional(),
+//   });
+
+//   const user = (req as any).user as User;
+
+//   const safeData = schema.safeParse(req.query);
+
+//   if (!safeData.success) {
+//     res.status(400).json(safeData.error);
+//     return;
+//   }
+
+//   const { categoryId, tagId } = safeData.data;
+
+//   const posts = await getAllPosts({
+//     categoryId: categoryId ? parseInt(categoryId) : undefined,
+//     tagId: tagId ? parseInt(tagId) : undefined,
+//     userId: user?.get("id"),
+//   });
+
+//   let postIds = posts.map((post) => post.id);
+
+//   const totalCommentsByPostIds = await getTotalCommentsByPostIds(postIds);
+
+//   // adding total comments to each post
+//   const postsWithTotalComments = posts.map((post) => {
+//     const totalComments = totalCommentsByPostIds.find(
+//       (totalCommentsByPostId) => totalCommentsByPostId.postId === post.id
+//     );
+
+//     return {
+//       ...post.toJSON(),
+//       totalComments: totalComments?.get("totalComments") || 0,
+//     };
+//   });
+
+//   res.json(postsWithTotalComments);
+//   return;
+// };
 
 export const addPostController = async (req: Request, res: Response) => {
   const user = (req as any).user as User;

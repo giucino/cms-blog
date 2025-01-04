@@ -9,8 +9,8 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () =>
-          import('./features/posts/posts.module').then((m) => m.PostsModule),
+        redirectTo: 'posts',
+        pathMatch: 'full',
       },
       {
         path: 'posts',

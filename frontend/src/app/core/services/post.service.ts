@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { IPost } from '../interfaces/models/post.model.interface';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,22 +13,45 @@ export class PostService {
 
   constructor() {}
 
-  getPosts(filters: { categoryId?: number; tagId?: number }) {
-    // convert every filter to a query parameter and append to the url
-    let url = this.baseUrl;
+  // getPosts(filters: { categoryId?: number; tagId?: number }): Observable<IPost[]> {
+  //   // Behalten Sie diese Methode für Abwärtskompatibilität bei
+  //   return this.httpClient.get<IPost[]>(this.baseUrl, { params: this.createParams(filters) });
+  // }
 
-    const params = new URLSearchParams();
+  getPublicPosts(filters: { categoryId?: number; tagId?: number }): Observable<IPost[]> {
+    return this.httpClient.get<IPost[]>(`${this.baseUrl}/public`, { params: this.createParams(filters) });
+  }
+
+  getAdminPosts(filters: { categoryId?: number; tagId?: number }): Observable<IPost[]> {
+    return this.httpClient.get<IPost[]>(`${this.baseUrl}/admin`, { params: this.createParams(filters) });
+  }
+
+  private createParams(filters: { categoryId?: number; tagId?: number }): HttpParams {
+    let params = new HttpParams();
     if (filters.categoryId) {
-      params.set('categoryId', filters.categoryId.toString());
+      params = params.set('categoryId', filters.categoryId.toString());
     }
     if (filters.tagId) {
-      params.set('tagId', filters.tagId.toString());
+      params = params.set('tagId', filters.tagId.toString());
     }
-
-    url += '?' + params.toString();
-
-    return this.httpClient.get<IPost[]>(url);
+    return params;
   }
+
+  // getPosts(filters: { categoryId?: number; tagId?: number }) {
+  //   let url = this.baseUrl;
+
+  //   const params = new URLSearchParams();
+  //   if (filters.categoryId) {
+  //     params.set('categoryId', filters.categoryId.toString());
+  //   }
+  //   if (filters.tagId) {
+  //     params.set('tagId', filters.tagId.toString());
+  //   }
+
+  //   url += '?' + params.toString();
+
+  //   return this.httpClient.get<IPost[]>(url);
+  // }
 
   getPostBySlug(slug: string) {
     return this.httpClient.get<IPost>(`${this.baseUrl}/slug/${slug}`);

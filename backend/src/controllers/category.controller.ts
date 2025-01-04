@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { z } from "zod";
+import { User } from "../models/User";
 import {
   addCategory,
   deleteCategory,
@@ -8,11 +9,10 @@ import {
   getCategoryBySlug,
   updateCategory,
 } from "../services/category.service";
-import { generateSlug } from "../shared/general.util";
-import { User } from "../models/User";
-import { deletePost, getAllPosts } from "../services/post.service";
-import { deletePostTagRelations } from "../services/post-tag.service";
 import { deletePostComments } from "../services/comment.service";
+import { deletePostTagRelations } from "../services/post-tag.service";
+import { deletePost, getAllPosts } from "../services/post.service";
+import { generateSlug } from "../shared/general.util";
 
 export const getCategories = async (req: Request, res: Response) => {
   // get user from req

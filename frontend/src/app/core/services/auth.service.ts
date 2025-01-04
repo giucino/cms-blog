@@ -53,14 +53,6 @@ export class AuthService {
     this.router.navigate(['/auth/login']);
   }
 
-  adminLogin() {
-    this.router.navigate(['/admin']);
-  }
-
-  adminHome() {
-    this.router.navigate(['/']);
-  }
-
   register({
     name,
     email,
