@@ -9,7 +9,7 @@ export function sendConfirmationEmail(email: string, token: string) {
   const resend = new Resend(process.env.RESEND_API_KEY);
 
   return resend.emails.send({
-    from: "onboarding@resend.dev",
+    from: 'Devlab Team <no-reply@blog.giuseppe-cino.de>',
     to: email,
     subject: "Please confirm your email",
     html,

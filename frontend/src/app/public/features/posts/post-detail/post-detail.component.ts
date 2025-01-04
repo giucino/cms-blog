@@ -5,7 +5,7 @@ import {
   HostListener,
   inject,
   Input,
-  OnInit
+  OnInit,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink, RouterModule } from '@angular/router';
@@ -18,11 +18,18 @@ import { CommentService } from '../../../../core/services/comment.service';
 import { FlowbiteService } from '../../../../core/services/flowbite.service';
 import { PostService } from '../../../../core/services/post.service';
 import { TagService } from '../../../../core/services/tag.service';
+import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 
 @Component({
   selector: 'app-post-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, RouterModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    ReactiveFormsModule,
+    RouterModule,
+    TruncatePipe,
+  ],
   templateUrl: './post-detail.component.html',
   styleUrl: './post-detail.component.scss',
 })
@@ -133,11 +140,13 @@ export class PostDetailComponent implements OnInit, AfterContentInit {
 
     // Check if the clicked element is not inside any dropdown
     Object.keys(this.dropdownStates).forEach((id) => {
-      const dropdownButton = document.getElementById(`dropdownComment${id}Button`);
+      const dropdownButton = document.getElementById(
+        `dropdownComment${id}Button`
+      );
       const dropdownMenu = document.getElementById(`dropdownComment${id}`);
 
       if (
-        dropdownButton && 
+        dropdownButton &&
         dropdownMenu &&
         !dropdownButton.contains(clickedElement) &&
         !dropdownMenu.contains(clickedElement)

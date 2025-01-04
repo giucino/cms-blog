@@ -4,12 +4,13 @@ import { PostService } from '../../../../core/services/post.service';
 import { IPost } from '../../../../core/interfaces/models/post.model.interface';
 import moment from 'moment';
 import 'moment/locale/de';
+import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 
 @Component({
   selector: 'app-posts-list',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink, TruncatePipe
   ],
   templateUrl: './posts-list.component.html',
   styleUrl: './posts-list.component.scss'
