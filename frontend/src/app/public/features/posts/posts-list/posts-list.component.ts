@@ -2,8 +2,7 @@ import {
   AfterContentInit,
   Component,
   inject,
-  Input,
-  OnInit,
+  Input
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import moment from 'moment';
@@ -19,7 +18,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
   templateUrl: './posts-list.component.html',
   styleUrl: './posts-list.component.scss',
 })
-export class PostsListComponent implements  OnInit {
+export class PostsListComponent implements AfterContentInit {
   moment: any = moment;
 
   @Input() categoryId?: number;
@@ -29,10 +28,6 @@ export class PostsListComponent implements  OnInit {
 
   constructor() {
     moment.locale('de');
-  }
-
-  ngOnInit() {
-    // this.loadPublicPosts();
   }
 
   ngAfterContentInit() {
@@ -52,15 +47,4 @@ export class PostsListComponent implements  OnInit {
       }
     });
   }
-
-  // ngAfterContentInit() {
-  //   this.postService
-  //     .getPosts({
-  //       categoryId: this.categoryId,
-  //       tagId: this.tagId,
-  //     })
-  //     .subscribe((data) => {
-  //       this.posts = data;
-  //     });
-  // }
 }

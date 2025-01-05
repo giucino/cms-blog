@@ -1,16 +1,12 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, inject } from '@angular/core';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
-import moment from 'moment';
-import { CategoryService } from '../../../../core/services/category.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
-import { lastValueFrom } from 'rxjs';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
-import { ITag } from '../../../../core/interfaces/models/tag.model.interface';
-import { TagService } from '../../../../core/services/tag.service';
+import moment from 'moment';
+import { lastValueFrom } from 'rxjs';
 import { IPost } from '../../../../core/interfaces/models/post.model.interface';
 import { PostService } from '../../../../core/services/post.service';
 
@@ -45,8 +41,6 @@ export class PostsListComponent {
 
   constructor() {
     this.loadAdminPosts();
-
-    // this.loadPosts();
   }
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -80,10 +74,6 @@ export class PostsListComponent {
   //   });
   // }
 
-  // ngOnInit() {
-  //   this.loadAdminPosts();
-  // }
-  
   loadAdminPosts() {
     this.postService.getAdminPosts({}).subscribe({
       next: (posts) => {
@@ -91,10 +81,10 @@ export class PostsListComponent {
       },
       error: (error) => {
         console.error('Error loading admin posts:', error);
-        // Hier können Sie eine Fehlerbehandlung hinzufügen
+        // Hier Fehlerbehandlung hinzufügen
       },
       complete: () => {
-        // Optional: Hier können Sie Aktionen definieren, die nach Abschluss des Observables ausgeführt werden sollen
+        // Optional: Hier kann man Aktionen definieren, die nach Abschluss des Observables ausgeführt werden sollen
         console.log('Admin posts loading completed');
       },
     });

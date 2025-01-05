@@ -156,18 +156,6 @@ export class PostDetailComponent implements OnInit, AfterContentInit {
     });
   }
 
-  // ngAfterContentInit() {
-  //   this.postService
-  //     .getPosts({
-  //       categoryId: this.categoryId,
-  //       tagId: this.tagId,
-  //     })
-  //     .subscribe((data) => {
-  //       this.posts = data;
-  //       this.updateFilteredPosts();
-  //     });
-  // }
-
   ngAfterContentInit() {
     this.postService.getPublicPosts({
       categoryId: this.categoryId,
@@ -179,7 +167,7 @@ export class PostDetailComponent implements OnInit, AfterContentInit {
       },
       error: (error) => {
         console.error('Error loading public post details:', error);
-        // Hier können Sie eine Fehlerbehandlung hinzufügen
+        // Here you can handle the error
       },
       complete: () => {
         console.log('Public post details loading completed');

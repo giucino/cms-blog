@@ -13,10 +13,10 @@ export class PostService {
 
   constructor() {}
 
-  // getPosts(filters: { categoryId?: number; tagId?: number }): Observable<IPost[]> {
-  //   // Behalten Sie diese Methode für Abwärtskompatibilität bei
-  //   return this.httpClient.get<IPost[]>(this.baseUrl, { params: this.createParams(filters) });
-  // }
+  getPosts(filters: { categoryId?: number; tagId?: number }): Observable<IPost[]> {
+    // Diese Methode für Abwärtskompatibilität beibehalten
+    return this.httpClient.get<IPost[]>(this.baseUrl, { params: this.createParams(filters) });
+  }
 
   getPublicPosts(filters: { categoryId?: number; tagId?: number }): Observable<IPost[]> {
     return this.httpClient.get<IPost[]>(`${this.baseUrl}/public`, { params: this.createParams(filters) });

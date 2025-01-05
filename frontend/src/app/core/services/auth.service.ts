@@ -40,7 +40,7 @@ export class AuthService {
         localStorage.setItem('session', JSON.stringify(r));
       },
       error: (e) => {
-        // alert('Login failed');
+        console.error(e);
       },
     });
 
