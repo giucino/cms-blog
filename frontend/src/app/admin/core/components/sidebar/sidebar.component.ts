@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, Output } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
-import { Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { SidebarService } from '../../../../core/services/sidebar.service';
 
 @Component({
@@ -15,17 +15,14 @@ import { SidebarService } from '../../../../core/services/sidebar.service';
 export class SidebarComponent {
   @Output() closeBtnClicked = new EventEmitter<void>();
   sidebarService = inject(SidebarService);
-  router = inject(Router);
 
   closeDrawer() {
     this.sidebarService.toggle();
   }
 
-  navigateAndClose(route: string) {
-    this.router.navigate([route]).then(() => {
+  navigateAndClose() {
       setTimeout(() => {
         this.sidebarService.toggle();
       }, 500);
-    });
-  }
+    }
 }
