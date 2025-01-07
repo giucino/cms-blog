@@ -9,3 +9,7 @@ dist
 *.log
 logs/
 error.log
+
+# Backend
+src/controllers/copypost.controller.ts
+src/services/copypost.service.ts

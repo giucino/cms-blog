@@ -37,22 +37,6 @@ export class PostService {
     return params;
   }
 
-  // getPosts(filters: { categoryId?: number; tagId?: number }) {
-  //   let url = this.baseUrl;
-
-  //   const params = new URLSearchParams();
-  //   if (filters.categoryId) {
-  //     params.set('categoryId', filters.categoryId.toString());
-  //   }
-  //   if (filters.tagId) {
-  //     params.set('tagId', filters.tagId.toString());
-  //   }
-
-  //   url += '?' + params.toString();
-
-  //   return this.httpClient.get<IPost[]>(url);
-  // }
-
   getPostBySlug(slug: string) {
     return this.httpClient.get<IPost>(`${this.baseUrl}/slug/${slug}`);
   }

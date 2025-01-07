@@ -19,7 +19,27 @@ import {
   getPostTags,
 } from "../services/post-tag.service";
 import { User } from "../models/User";
-import { deletePostComments, getTotalCommentsByPostIds } from "../services/comment.service";
+import {
+  deletePostComments,
+  getTotalCommentsByPostIds,
+} from "../services/comment.service";
+
+// Funktion zum Abrufen von Posts mit Kommentaren
+const getPostsWithComments = async (filters: any) => {
+  const posts = await getAllPosts(filters);
+  const postIds = posts.map((post) => post.id);
+  const totalCommentsByPostIds = await getTotalCommentsByPostIds(postIds);
+
+  return posts.map((post) => {
+    const totalComments = totalCommentsByPostIds.find(
+      (totalCommentsByPostId) => totalCommentsByPostId.postId === post.id
+    );
+    return {
+      ...post.toJSON(),
+      totalComments: totalComments?.get("totalComments") || 0,
+    };
+  });
+};
 
 // Controller für den öffentlichen Bereich
 export const getPublicPostsController = async (req: Request, res: Response) => {
@@ -37,29 +57,12 @@ export const getPublicPostsController = async (req: Request, res: Response) => {
 
   const { categoryId, tagId } = safeData.data;
 
-  const posts = await getAllPosts({
+  const posts = await getPostsWithComments({
     categoryId: categoryId ? parseInt(categoryId) : undefined,
     tagId: tagId ? parseInt(tagId) : undefined,
   });
 
-  let postIds = posts.map((post) => post.id);
-
-  const totalCommentsByPostIds = await getTotalCommentsByPostIds(postIds);
-
-  // adding total comments to each post
-  const postsWithTotalComments = posts.map((post) => {
-    const totalComments = totalCommentsByPostIds.find(
-      (totalCommentsByPostId) => totalCommentsByPostId.postId === post.id
-    );
-
-    return {
-      ...post.toJSON(),
-      totalComments: totalComments?.get("totalComments") || 0,
-    };
-  });
-
-  res.json(postsWithTotalComments);
-  return;
+  res.json(posts);
 };
 
 // Controller für den Adminbereich
@@ -80,75 +83,13 @@ export const getAdminPostsController = async (req: Request, res: Response) => {
 
   const { categoryId, tagId } = safeData.data;
 
-  const posts = await getAllPosts({
+  const posts = await getPostsWithComments({
     categoryId: categoryId ? parseInt(categoryId) : undefined,
     tagId: tagId ? parseInt(tagId) : undefined,
     userId: user.get("id"),
   });
-
-  let postIds = posts.map((post) => post.id);
-
-  const totalCommentsByPostIds = await getTotalCommentsByPostIds(postIds);
-
-  // adding total comments to each post
-  const postsWithTotalComments = posts.map((post) => {
-    const totalComments = totalCommentsByPostIds.find(
-      (totalCommentsByPostId) => totalCommentsByPostId.postId === post.id
-    );
-
-    return {
-      ...post.toJSON(),
-      totalComments: totalComments?.get("totalComments") || 0,
-    };
-  });
-
-  res.json(postsWithTotalComments);
-  return;
-
+  res.json(posts);
 };
-
-// export const getAllPostsController = async (req: Request, res: Response) => {
-//   const schema = z.object({
-//     categoryId: z.string().optional(),
-//     tagId: z.string().optional(),
-//   });
-
-//   const user = (req as any).user as User;
-
-//   const safeData = schema.safeParse(req.query);
-
-//   if (!safeData.success) {
-//     res.status(400).json(safeData.error);
-//     return;
-//   }
-
-//   const { categoryId, tagId } = safeData.data;
-
-//   const posts = await getAllPosts({
-//     categoryId: categoryId ? parseInt(categoryId) : undefined,
-//     tagId: tagId ? parseInt(tagId) : undefined,
-//     userId: user?.get("id"),
-//   });
-
-//   let postIds = posts.map((post) => post.id);
-
-//   const totalCommentsByPostIds = await getTotalCommentsByPostIds(postIds);
-
-//   // adding total comments to each post
-//   const postsWithTotalComments = posts.map((post) => {
-//     const totalComments = totalCommentsByPostIds.find(
-//       (totalCommentsByPostId) => totalCommentsByPostId.postId === post.id
-//     );
-
-//     return {
-//       ...post.toJSON(),
-//       totalComments: totalComments?.get("totalComments") || 0,
-//     };
-//   });
-
-//   res.json(postsWithTotalComments);
-//   return;
-// };
 
 export const addPostController = async (req: Request, res: Response) => {
   const user = (req as any).user as User;
