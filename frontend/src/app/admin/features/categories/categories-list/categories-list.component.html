@@ -1,4 +1,4 @@
-<div class="p-5">
+<!-- <div class="p-5">
     <h1 class="text-left">Categories</h1>
 
     <div class="flex justify-between items-center mb-5">
@@ -10,7 +10,25 @@
 
             <mat-icon>delete</mat-icon>
         </button>
-    </div>
+    </div> -->
+
+    <div class="p-5">
+        <h1 class="text-left text-2xl font-bold mb-5 text-gray-900 dark:text-white">Categories</h1>
+    
+        <div class="flex justify-between items-center mb-5">
+            <button
+                class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                routerLink="/admin/categories/add">Create</button>
+            <button (click)="deleteSelectedCategories()" [disabled]="!selection.hasValue()"
+                class="bg-red-500 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-white focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none dark:focus:ring-red-800">
+                Delete
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
 
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
