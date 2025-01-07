@@ -1,5 +1,6 @@
 <!-- <mat-drawer-container class="h-screen mat-typography" autosize> -->
 <mat-drawer-container class="flex flex-col h-screen dark:bg-gray-900">
+    
     <app-header (toggleBtnClicked)="drawer.toggle()"></app-header>
 
     <mat-drawer #drawer class="example-sidenav" mode="push" [opened]="false">
@@ -9,5 +10,7 @@
     <div class="grow">
         <router-outlet></router-outlet>
     </div>
+
     <app-footer></app-footer>
+
 </mat-drawer-container>

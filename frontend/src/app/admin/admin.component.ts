@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HeaderComponent } from './core/components/header/header.component';
 import { FooterComponent } from './core/components/footer/footer.component';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { SidebarComponent } from './core/components/sidebar/sidebar.component';
+import { SidebarService } from '../core/services/sidebar.service';
 
 @Component({
   selector: 'app-admin',
@@ -13,11 +14,20 @@ import { SidebarComponent } from './core/components/sidebar/sidebar.component';
     HeaderComponent,
     FooterComponent,
     MatSidenavModule,
-    SidebarComponent
+    SidebarComponent,
   ],
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss'
+  styleUrl: './admin.component.scss',
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit {
+  @ViewChild('drawer') drawer!: MatDrawer;
+  sidebarService = inject(SidebarService);
 
+  ngOnInit() {
+    this.sidebarService.toggle$.subscribe(() => {
+      if (this.drawer) {
+        this.drawer.toggle();
+      }
+    });
+  }
 }
