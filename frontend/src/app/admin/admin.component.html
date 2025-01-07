@@ -2,7 +2,7 @@
 <mat-drawer-container class="flex flex-col h-screen dark:bg-gray-900">
     <app-header (toggleBtnClicked)="drawer.toggle()"></app-header>
 
-    <mat-drawer #drawer class="example-sidenav" mode="side" [opened]="false">
+    <mat-drawer #drawer class="example-sidenav" mode="push" [opened]="false">
         <app-sidebar></app-sidebar>
     </mat-drawer>
 
