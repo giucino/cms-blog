@@ -1,6 +1,6 @@
 @if(tag){
 
     <h2 class="px-4 mx-auto max-w-screen-xl text-xl font-bold text-gray-900 dark:text-white">{{ tag.name }}</h2>
-    <app-posts-list [tagId]="tag.id"></app-posts-list>
+    <app-posts-list [tagId]="tag.id" [showWelcome]="false"></app-posts-list>
     
     }

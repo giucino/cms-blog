@@ -1,9 +1,5 @@
-import {
-  AfterContentInit,
-  Component,
-  inject,
-  Input
-} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AfterContentInit, Component, inject, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import moment from 'moment';
 import 'moment/locale/de';
@@ -14,7 +10,7 @@ import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
 @Component({
   selector: 'app-posts-list',
   standalone: true,
-  imports: [RouterLink, TruncatePipe],
+  imports: [CommonModule, RouterLink, TruncatePipe],
   templateUrl: './posts-list.component.html',
   styleUrl: './posts-list.component.scss',
 })
@@ -23,6 +19,7 @@ export class PostsListComponent implements AfterContentInit {
 
   @Input() categoryId?: number;
   @Input() tagId?: number;
+  @Input() showWelcome: boolean = true;
   posts: IPost[] = [];
   postService = inject(PostService);
 
@@ -31,20 +28,22 @@ export class PostsListComponent implements AfterContentInit {
   }
 
   ngAfterContentInit() {
-    this.postService.getPublicPosts({
-      categoryId: this.categoryId,
-      tagId: this.tagId,
-    }).subscribe({
-      next: (data) => {
-        this.posts = data;
-      },
-      error: (error) => {
-        console.error('Error loading public posts:', error);
-        // Hier können Sie eine Fehlerbehandlung hinzufügen
-      },
-      complete: () => {
-        console.log('Public posts loading completed');
-      }
-    });
+    this.postService
+      .getPublicPosts({
+        categoryId: this.categoryId,
+        tagId: this.tagId,
+      })
+      .subscribe({
+        next: (data) => {
+          this.posts = data;
+        },
+        error: (error) => {
+          console.error('Error loading public posts:', error);
+          // Hier können Sie eine Fehlerbehandlung hinzufügen
+        },
+        complete: () => {
+          console.log('Public posts loading completed');
+        },
+      });
   }
 }

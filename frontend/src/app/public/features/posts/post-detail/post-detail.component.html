@@ -72,7 +72,7 @@
                     <div class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
                         <!-- <img class="mr-4 w-16 h-16 rounded-full" src="img.png" alt=""> -->
                         <div>
-                            <a href="#" rel="author" class="text-xl font-bold text-gray-900 dark:text-white">
+                            <a rel="author" class="text-xl font-bold text-gray-900 dark:text-white">
                                 {{ post.user.name }}</a>
                             <p class="text-base text-gray-500 dark:text-gray-400"><time datetime="2022-02-08"
                                     title="{{moment(post.createdAt).format('LLL')}}">
@@ -83,14 +83,14 @@
                         </div>
                     </div>
                 </address>
-                <h1
+                <h2
                     class="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl dark:text-white">
-                    {{post.title}}</h1>
+                    {{post.title}}</h2>
             </header>
             <p class="lead dark:text-gray-400">{{post.content}}</p>
 
             <!-- Tags -->
-            <div class="flex mb-16 mt-5">
+            <div class="flex flex-wrap gap-2 mb-8 md:mb-16 mt-3 md:mt-5 md:px-0">
                 @for(postTag of postTags; track postTag.tagId){
                 <a [routerLink]="['/tags', postTag.tag.slug]"
                     class="inline-flex items-center py-2.5 px-4 mr-2 text-s font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800">#
@@ -145,7 +145,7 @@
                                     ? moment(comment.createdAt).format('LLL')
                                     : moment(comment.createdAt).fromNow() }}</time></p>
                         </div>
-                        @if(authService.session){
+                        <!-- @if(authService.session){
                         <div class="relative inline-block">
                             <button [attr.id]="'dropdownComment' + comment.id + 'Button'"
                                 [attr.aria-controls]="'dropdownComment' + comment.id"
@@ -158,7 +158,6 @@
                                 </svg>
                                 <span class="sr-only">Comment settings</span>
                             </button>
-                            <!-- Dropdown menu -->
                             <div [attr.id]="'dropdownComment' + comment.id" [ngClass]="{
                             hidden: !dropdownStates[comment.id],
                             'absolute mt-3 right-0 z-10 w-24 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600': true
@@ -172,7 +171,7 @@
                                 </ul>
                             </div>
                         </div>
-                        }
+                        } -->
                     </footer>
                     <p class="text-gray-500 dark:text-gray-400">{{comment.content}}</p>
                 </article>
