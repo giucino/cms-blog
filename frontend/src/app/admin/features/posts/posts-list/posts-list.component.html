@@ -77,81 +77,82 @@
 
 </div> -->
 
-<div class="p-5">
-    <h1 class="text-left text-2xl font-bold mb-5 text-gray-900 dark:text-white">Posts</h1>
+<section class="bg-white dark:bg-gray-900">
+    <div class="py-4 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+        <h1 class="text-left text-2xl font-bold mb-5 text-gray-900 dark:text-white">Posts</h1>
 
-    <div class="flex justify-between items-center mb-5">
-        <button
-            class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-            routerLink="/admin/posts/add">Create</button>
-        <button (click)="deleteSelectedPosts()" [disabled]="selectedPosts.size === 0"
-            class="bg-red-500 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-white focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none dark:focus:ring-red-800">
-            Delete
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd"
-                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                    clip-rule="evenodd" />
-            </svg>
-        </button>
-    </div>
+        <div class="flex justify-between items-center mb-5">
+            <button
+                class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                routerLink="/admin/posts/add">Create</button>
+            <button (click)="deleteSelectedPosts()" [disabled]="selectedPosts.size === 0"
+                class="bg-red-500 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-white focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none dark:focus:ring-red-800">
+                Delete
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd" />
+                </svg>
+            </button>
+        </div>
 
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                    <th scope="col" class="p-4">
-                        <div class="flex items-center">
-                            <input type="checkbox" (change)="toggleAllRows($event)" [checked]="isAllSelected()"
-                                class="w-4 h-4 text-primary-700 bg-gray-100 border-gray-300 rounded focus:ring-primary-300 dark:focus:ring-primary-800 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label class="sr-only">checkbox</label>
-                        </div>
-                    </th>
-                    <th scope="col" class="px-6 py-3">ID</th>
-                    <th scope="col" class="px-6 py-3">Comments</th>
-                    <th scope="col" class="px-6 py-3">Title</th>
-                    <th scope="col" class="px-6 py-3">Category</th>
-                    <th scope="col" class="px-6 py-3">Created At</th>
-                    <th scope="col" class="px-6 py-3">Updated At</th>
-                    <th scope="col" class="px-6 py-3">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let post of posts"
-                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                    (click)="toggleRowSelection(post.id)">
-                    <td class="w-4 p-4">
-                        <div class="flex items-center">
-                            <input type="checkbox" (click)="$event.stopPropagation()"
-                                (change)="toggleRowSelection(post.id)" [checked]="selectedPosts.has(post.id)"
-                                class="w-4 h-4 text-primary-700 bg-gray-100 border-gray-300 rounded focus:ring-primary-300 dark:focus:ring-primary-800 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label class="sr-only">checkbox</label>
-                        </div>
-                    </td>
-                    <td class="px-6 py-4">{{post.id}}</td>
-                    <td class="px-6 py-4">
-                        <a [routerLink]="'/admin/comments/'+post.id" (click)="$event.stopPropagation()"
-                            class="font-medium text-primary-400 dark:text-primary-400 hover:underline">
-                            {{post.totalComments}}
-                        </a>
-                    </td>
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{post.title}}
-                    </td>
-                    <td class="px-6 py-4">{{post.category.name}}</td>
-                    <td class="px-6 py-4">{{moment(post.createdAt).fromNow()}}</td>
-                    <td class="px-6 py-4">{{moment(post.updatedAt).fromNow()}}</td>
-                    <td class="px-6 py-4">
-                        <a [routerLink]="['/admin/posts/edit', post.slug]"
-                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                            (click)="$event.stopPropagation()">
-                            Edit
-                        </a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="p-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" (change)="toggleAllRows($event)" [checked]="isAllSelected()"
+                                    class="w-4 h-4 text-primary-700 bg-gray-100 border-gray-300 rounded focus:ring-primary-300 dark:focus:ring-primary-800 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label class="sr-only">checkbox</label>
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3">ID</th>
+                        <th scope="col" class="px-6 py-3">Comments</th>
+                        <th scope="col" class="px-6 py-3">Title</th>
+                        <th scope="col" class="px-6 py-3">Category</th>
+                        <th scope="col" class="px-6 py-3">Created At</th>
+                        <th scope="col" class="px-6 py-3">Updated At</th>
+                        <th scope="col" class="px-6 py-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let post of posts"
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                        (click)="toggleRowSelection(post.id)">
+                        <td class="w-4 p-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" (click)="$event.stopPropagation()"
+                                    (change)="toggleRowSelection(post.id)" [checked]="selectedPosts.has(post.id)"
+                                    class="w-4 h-4 text-primary-700 bg-gray-100 border-gray-300 rounded focus:ring-primary-300 dark:focus:ring-primary-800 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label class="sr-only">checkbox</label>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">{{post.id}}</td>
+                        <td class="px-6 py-4">
+                            <a [routerLink]="'/admin/comments/'+post.id" (click)="$event.stopPropagation()"
+                                class="font-medium text-primary-400 dark:text-primary-400 hover:underline">
+                                {{post.totalComments}}
+                            </a>
+                        </td>
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{post.title}}
+                        </td>
+                        <td class="px-6 py-4">{{post.category.name}}</td>
+                        <td class="px-6 py-4">{{moment(post.createdAt).fromNow()}}</td>
+                        <td class="px-6 py-4">{{moment(post.updatedAt).fromNow()}}</td>
+                        <td class="px-6 py-4">
+                            <a [routerLink]="['/admin/posts/edit', post.slug]"
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                (click)="$event.stopPropagation()">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <!-- <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
+        <!-- <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
         <span
             class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing
             <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span
@@ -187,4 +188,5 @@
             </li>
         </ul>
     </nav> -->
-</div>
+    </div>
+</section>

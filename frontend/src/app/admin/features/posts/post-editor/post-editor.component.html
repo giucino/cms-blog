@@ -46,8 +46,8 @@
 
 
             <mat-chip-set aria-label="Fish selection">
-                
-               @for(selectedTag of selectedTags; track selectedTag.id){
+
+                @for(selectedTag of selectedTags; track selectedTag.id){
                 <mat-chip>
                     {{selectedTag.name}}
 
@@ -55,14 +55,14 @@
                         <mat-icon>cancel</mat-icon>
                     </button>
                 </mat-chip>
-               }
-               
+                }
+
 
 
             </mat-chip-set>
 
             <button type="button" (click)="showTagsDropdown=!showTagsDropdown" mat-raised-button class="my-9 mb-5">
-                <mat-icon >
+                <mat-icon>
                     {{showTagsDropdown ? 'expand_less' : 'expand_more'}}
                 </mat-icon>
                 Add more tags
@@ -72,7 +72,7 @@
             @if(showTagsDropdown){
             <mat-form-field appearance="fill" class="mt-5">
                 <mat-label>Select tag</mat-label>
-                <mat-select matInput placeholder="Tag" (selectionChange)="addTag($event.value)" >
+                <mat-select matInput placeholder="Tag" (selectionChange)="addTag($event.value)">
 
 
                     @for(tag of tags; track tag.id){
