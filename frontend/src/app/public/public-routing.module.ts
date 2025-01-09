@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PublicComponent } from './public.component';
+import { ContactComponent } from './core/components/contact/contact/contact.component';
 
 const routes: Routes = [
   {
@@ -23,6 +24,14 @@ const routes: Routes = [
           import('./features/categories/categories.module').then(
             (m) => m.CategoriesModule
           ),
+      },
+      {
+        path: 'contact',
+        component: ContactComponent,
+      },
+      {
+        path: 'blog',
+        component: ContactComponent,
       },
     ],
   },

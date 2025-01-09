@@ -22,8 +22,8 @@ export class HeaderComponent implements OnInit {
 
   menuItems = [
     { path: '/', label: 'Home' },
-    { path: '/post/re', label: 'Blog' },
-    { path: '/contact', label: 'Contact' },
+    { path: '/blog', label: 'Blog' },
+    { path: '/contact', label: 'Kontakt' },
   ];
 
   constructor(private router: Router, private renderer: Renderer2) {}

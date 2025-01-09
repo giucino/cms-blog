@@ -12,8 +12,8 @@ import { RouterModule } from '@angular/router';
 export class FooterComponent {
   menuItems = [
     { path: '/', label: 'Home' },
-    { path: '/post/re', label: 'Blog' },
-    { path: '/contact', label: 'Contact' },
+    { path: '/blog', label: 'Blog' },
+    { path: '/contact', label: 'Kontakt' },
   ];
 
   constructor() {}

@@ -101,7 +101,7 @@
 
             <section class="not-format">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Discussion
+                    <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Unterhaltung
                         ({{comments.length}})</h2>
                 </div>
                 @if(authService.session){
@@ -111,20 +111,20 @@
                         <label for="comment" class="sr-only">Your comment</label>
                         <textarea formControlName="content" id="comment" rows="6"
                             class="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0 dark:text-white dark:placeholder-gray-400 dark:bg-gray-800 outline-none"
-                            placeholder="Write a comment..." required></textarea>
+                            placeholder="Einen Kommentar schreiben..." required></textarea>
                     </div>
                     <button [disabled]="!form.valid" type="submit" [ngClass]="{
                         'inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg': true, 
                         'focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800': form.valid,
                         'opacity-50 cursor-not-allowed': !form.valid
                         }">
-                        Post comment
+                        Kommentar posten
                     </button>
                 </form>
                 }
                 @else {
                 <div class="text-center mb-10">
-                    <a [routerLink]="['/auth/login']" class="text-primary-700">Login</a> to post a comment
+                    <a [routerLink]="['/auth/login']" class="text-primary-700">Anmelden</a> um einen Kommentar zu posten
                 </div>
                 }
                 @for(comment of comments; track comment.id){
@@ -183,9 +183,9 @@
 }
 
 
-<aside aria-label="Related articles" class="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800">
+<aside aria-label="Empfohlene Artikel" class="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800">
     <div class="px-4 mx-auto max-w-screen-xl">
-        <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Related articles</h2>
+        <h2 class="mb-8 text-2xl font-bold text-gray-900 dark:text-white">Empfohlene Artikel</h2>
         <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
             @for(post of filteredPosts; track post.id){
             <article class="max-w-xs">
@@ -199,7 +199,7 @@
                 <p class="text-sm mb-4 text-gray-500 dark:text-gray-400">{{ post.content | truncate:100 }}</p>
                 <a [routerLink]="'/post/'+post.slug"
                     class="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline">
-                    Read more
+                    zum Artikel
                 </a>
             </article>
             }
