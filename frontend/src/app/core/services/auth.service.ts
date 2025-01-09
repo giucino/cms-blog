@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { IUser } from '../interfaces/models/user.model.interface';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
-import { share } from 'rxjs';
+import { Observable, share } from 'rxjs';
 
 export interface Session {
   accessToken: string;
@@ -45,6 +45,15 @@ export class AuthService {
     });
 
     return ob;
+  }
+
+  guestLogin(): Observable<Session> {
+    const guestCredentials = {
+      email: 'test@gmail.com',
+      password: '1ABCdef'
+    };
+
+    return this.login(guestCredentials);
   }
 
   logout() {

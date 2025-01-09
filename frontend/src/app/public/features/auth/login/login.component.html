@@ -1,4 +1,4 @@
-<!-- <form (submit)="submit()" class="card w-[400px]" [formGroup]="form">
+<form (submit)="submit()" class="card w-[400px]" [formGroup]="form">
     <div>
         <label for="email">Email</label>
         <input formControlName="email" type="email" id="email" name="email" placeholder="Email">
@@ -23,7 +23,7 @@
     {{ form.valid | json }}
 
 
-</form> -->
+</form>
 
 <section class="bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center">
     <div class="w-full max-w-md px-6 py-8 mx-auto">
@@ -78,6 +78,11 @@
                     'hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800': form.valid,
                     'opacity-50 cursor-not-allowed': !form.valid
                     }">Log in</button>
+
+                    <button type="button" (click)="guestLogin()"
+                        class="w-full text-primary-600 bg-transparent border border-primary-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-primary-50 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:border-primary-500 dark:text-primary-500 dark:hover:bg-gray-700 dark:focus:ring-primary-800">
+                        Guest Login
+                    </button>
 
                     <p class="text-sm font-light text-gray-500 dark:text-gray-400">
                         Don’t have an account yet? <a routerLink="/auth/register"
