@@ -75,8 +75,10 @@ export class CategoriesListComponent {
       });
 
       Promise.all(promises).then(()=>{
+        this.modalService.show('Der Eintrag wurde erfolgreich gelöscht.', 'deleted');
+        console.log('deleted')
+        // this.modalService.show('Kategorie erfolgreich entfernt')
         this.loadCategories();
       });
-      this.modalService.show('Kategorie erfolgreich entfernt')
   }
 }
