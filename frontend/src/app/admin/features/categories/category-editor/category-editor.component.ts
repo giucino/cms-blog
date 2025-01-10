@@ -79,8 +79,7 @@ export class CategoryEditorComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.modalService.showUpdated('q');
-          // this.modalService.show('Kategorie erfolgreich aktualisiert');
+          this.modalService.showUpdated('Kategorie erfolgreich aktualisiert');
           this.router.navigate(['/admin/categories']);
         },
         error: (error) => {

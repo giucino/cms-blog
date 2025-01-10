@@ -85,18 +85,6 @@ import { BehaviorSubject } from 'rxjs';
 import { SuccessModalComponent } from '../components/success-modal/success-modal.component';
 import { ModalConfig } from '../interfaces/models/types.model.interface';
 
-// export interface ModalConfig {
-//   title: string;
-//   message: string;
-//   iconPath: string;
-//   iconClass: string;
-//   iconBackgroundClass: string;
-//   textClass: string;
-//   buttonClass: string;
-//   confirmButtonText: string;
-//   state: 'created' | 'updated' | 'deleted' | 'error';
-// }
-
 @Injectable({
   providedIn: 'root',
 })
@@ -163,9 +151,9 @@ export class ModalService {
       iconPath: this.getIconPathForState(state),
       iconClass: this.getIconClassForState(state),
       iconBackgroundClass: this.getIconBackgroundClassForState(state),
-      textClass: 'text-gray-900 dark:text-white',
+      textClass: 'mb-4 text-lg font-semibold text-gray-900 dark:text-white',
       buttonClass: this.getButtonClassForState(state),
-      confirmButtonText: 'OK',
+      confirmButtonText: 'Weiter',
       state: state
     };
 
@@ -225,11 +213,11 @@ export class ModalService {
     switch (state) {
       case 'created':
       case 'updated':
-        return 'text-white bg-green-600 hover:bg-green-700 focus:ring-green-300 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-800';
+        return 'bg-primary-600 hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-900';
       case 'deleted':
-        return 'text-white bg-red-600 hover:bg-red-700 focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-800';
+        return 'bg-red-600 hover:bg-red-700 focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-800';
       case 'error':
-        return 'text-white bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-300 dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:focus:ring-yellow-800';
+        return 'bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-300 dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:focus:ring-yellow-800';
     }
   }
 }
