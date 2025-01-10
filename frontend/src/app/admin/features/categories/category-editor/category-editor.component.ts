@@ -4,10 +4,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { CategoryService } from '../../../../core/services/category.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
+import { CategoryService } from '../../../../core/services/category.service';
 import { FlowbiteService } from '../../../../core/services/flowbite.service';
+import { ModalService } from '../../../../core/services/modal.service';
 
 @Component({
   selector: 'app-category-editor',
@@ -29,6 +30,7 @@ export class CategoryEditorComponent implements OnInit {
   route = inject(ActivatedRoute);
   category: ICategory | undefined;
   flowbite = inject(FlowbiteService);
+  modalService = inject(ModalService)
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -74,7 +76,8 @@ export class CategoryEditorComponent implements OnInit {
         name: this.form.value.name!,
       })
       .subscribe(() => {
-        alert('Category updated');
+        this.modalService.show('Kategorie erfolgreich aktualisiert')
+        this.router.navigate(['/admin/categories']);
       });
   }
 }
