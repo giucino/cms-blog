@@ -63,6 +63,7 @@ export class CategoryEditorComponent implements OnInit {
     this.categoryService
       .addCategory({ name: this.form.value.name! })
       .subscribe(() => {
+        this.modalService.show('Kategorie erfolgreich erstellt')
         this.router.navigate(['/admin/categories']);
       });
   }

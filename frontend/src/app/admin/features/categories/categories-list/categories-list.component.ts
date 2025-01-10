@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { lastValueFrom } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import { ModalService } from '../../../../core/services/modal.service';
 
 
 @Component({
@@ -26,6 +27,7 @@ export class CategoriesListComponent {
   dataSource = new MatTableDataSource<ICategory>([]);
   selection = new SelectionModel<ICategory>(true, []);
   categoryService = inject(CategoryService)
+  modalService = inject(ModalService)
 
   constructor() {
     this.loadCategories();
@@ -75,5 +77,6 @@ export class CategoriesListComponent {
       Promise.all(promises).then(()=>{
         this.loadCategories();
       });
+      this.modalService.show('Kategorie erfolgreich entfernt')
   }
 }
