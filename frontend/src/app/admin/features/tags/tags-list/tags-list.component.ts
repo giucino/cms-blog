@@ -85,9 +85,14 @@ export class TagsListComponent {
       return lastValueFrom(ob);
     });
 
-    Promise.all(promises).then(() => {
-      this.modalService.showDeleted('Tag erfolgreich entfernt');
-      this.loadTags();
-    });
+    Promise.all(promises)
+      .then(() => {
+        this.modalService.showDeleted('Tag erfolgreich entfernt');
+        this.loadTags();
+      })
+      .catch((error) => {
+        this.modalService.showError('Fehler beim Löschen des Tags');
+        console.error('Delete error:', error);
+      });
   }
 }

@@ -79,15 +79,28 @@ export class CategoriesListComponent {
     const selectedCategoryIds = selectedCategories.map(
       (category) => category.id
     );
-    let promises = selectedCategoryIds.map((id) => {
-      let ob = this.categoryService.deleteCategory(id);
-      // convert into promise
-      return lastValueFrom(ob);
-    });
 
-    Promise.all(promises).then(() => {
-      this.modalService.showDeleted('Kategorie erfolgreich entfernt');
-      this.loadCategories();
-    });
+    const confirmation = confirm(
+      'Möchtest du die ausgewählten Kategorien wirklich löschen? Dadurch werden auch alle zugehörigen Posts, Tags und Kommentare unwiderruflich gelöscht.'
+    );
+
+    if (confirmation) {
+      let promises = selectedCategoryIds.map((id) => {
+        let ob = this.categoryService.deleteCategory(id);
+        // convert into promise
+        return lastValueFrom(ob);
+      });
+
+      Promise.all(promises)
+        .then(() => {
+          this.modalService.showDeleted('Kategorie erfolgreich entfernt');
+          this.loadCategories();
+          this.selection.clear();
+        })
+        .catch((error) => {
+          this.modalService.showError('Fehler beim Löschen der Kategorie');
+          console.error('Delete error:', error);
+        });
+    }
   }
 }

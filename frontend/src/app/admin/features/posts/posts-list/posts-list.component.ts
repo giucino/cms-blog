@@ -177,10 +177,15 @@ export class PostsListComponent {
       return lastValueFrom(ob);
     });
 
-    Promise.all(promises).then(() => {
-      this.modalService.showDeleted('Post erfolgreich entfernt');
-      this.loadAdminPosts();
-      this.selectedPosts.clear();
-    });
+    Promise.all(promises)
+      .then(() => {
+        this.modalService.showDeleted('Post erfolgreich entfernt');
+        this.loadAdminPosts();
+        this.selectedPosts.clear();
+      })
+      .catch((error) => {
+        this.modalService.showError('Fehler beim Löschen des Posts');
+        console.error('Error deleting posts:', error);
+      });
   }
 }
