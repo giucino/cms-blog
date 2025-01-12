@@ -1,23 +1,13 @@
-import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import { ModalConfig } from '../../interfaces/models/types.model.interface';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-success-modal',
+  selector: 'app-confirm-dialog',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './success-modal.component.html',
-  styleUrl: './success-modal.component.scss',
+  imports: [],
+  templateUrl: './confirm-dialog.component.html',
+  styleUrl: './confirm-dialog.component.scss',
 })
-export class SuccessModalComponent {
-  config: ModalConfig | null = null;
+export class ConfirmDialogComponent {
   @Output() close = new EventEmitter<void>();
   isVisible: boolean = false;
   message: string = '';
@@ -35,8 +25,7 @@ export class SuccessModalComponent {
     }
   }
 
-  openModal(config: ModalConfig) {
-    this.config = config;
+  openModal() {
     this.isVisible = true;
     if (this.closeButton) {
       setTimeout(() => this.closeButton.nativeElement.focus(), 0);

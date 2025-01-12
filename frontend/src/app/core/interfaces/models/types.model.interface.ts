@@ -1,9 +1,10 @@
 import { SafeHtml } from '@angular/platform-browser';
 
 export interface ModalConfig {
-  message?: string;
+  message: string;
+  buttonText: string;
   iconConfig?: {
-    path?: SafeHtml;
+    path?: string | SafeHtml;
     class?: string;
     backgroundClass?: string;
     ariaHidden?: string;
@@ -11,9 +12,8 @@ export interface ModalConfig {
     viewBox?: string;
     xmlns?: string;
   };
-  textClass?: string;
+  messageClass?: string;
   buttonClass?: string;
-  confirmButtonText?: string;
   state: 'created' | 'updated' | 'deleted' | 'error';
   srOnlyText?: string;
 }

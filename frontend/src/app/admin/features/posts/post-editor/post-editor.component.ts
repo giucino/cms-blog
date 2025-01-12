@@ -138,7 +138,7 @@ export class PostEditorComponent {
       })
       .subscribe({
         next: () => {
-          this.modalService.showCreated('Post erfolgreich aktualisiert');
+          this.modalService.showUpdated('Post erfolgreich aktualisiert');
           this.router.navigate(['/admin/posts']);
         },
         error: (error) => {

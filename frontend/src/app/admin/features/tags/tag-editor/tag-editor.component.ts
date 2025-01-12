@@ -70,7 +70,7 @@ export class TagEditorComponent {
       })
       .subscribe({ next: 
         () => {
-        this.modalService.showCreated('Tag erfolgreich aktualisiert');
+        this.modalService.showUpdated('Tag erfolgreich aktualisiert');
         this.router.navigate(['/admin/tags']);
         },
         error: (error) => {

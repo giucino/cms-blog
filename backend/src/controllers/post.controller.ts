@@ -161,7 +161,7 @@ export const updatePostController = async (req: Request, resp: Response) => {
 
   // checking if post id is valid
   const post = await getPostById(id);
-
+  
   // check if all tags are valid
   await validateTags(resp, tagIds);
 
@@ -183,6 +183,11 @@ export const updatePostController = async (req: Request, resp: Response) => {
     const category = await getCategoryById(categoryId);
     if (!category) {
       resp.status(400).json({ message: "Invalid category id" });
+      return;
+    }
+
+    if (post && post.id === id && title === post.title && content === post.content && categoryId === post.categoryId && tagIds === post.tags.map(tag => tag.id)) {
+      resp.status(400).json({ message: "Nothing was changed." });
       return;
     }
   }

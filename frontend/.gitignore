@@ -46,3 +46,7 @@ Thumbs.db
 src/app/public/shared/directives/copypassword-toggle.directive.ts
 src/app/core/services/dark-mode.service.ts
 src/app/core/services/postcopy.service.ts
+src/app/admin/features/categories/categories-list/copycategories-list.component.ts
+src/app/admin/features/categories/categories-list/copycategories-list.component.html
+src/app/admin/features/posts/posts-list/copyposts-list.component.html
+src/app/admin/features/posts/posts-list/copyposts-list.component.ts

@@ -21,13 +21,13 @@
                 <span class="sr-only">{{ config?.srOnlyText }}</span>
             </div>
 
-            <p [class]="config?.textClass">
+            <p [class]="config?.messageClass">
                 {{ config?.message }}
             </p>
 
             <button #closeButton (click)="closeModal()" type="button" [class]="config?.buttonClass || ''"
                 class="py-2 px-3 text-sm font-medium text-center text-white rounded-lg focus:ring-4 focus:outline-none">
-                {{ config?.confirmButtonText || 'OK' }}
+                {{ config?.buttonText || 'OK' }}
             </button>
         </div>
     </div>

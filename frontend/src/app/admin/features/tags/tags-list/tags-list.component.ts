@@ -89,6 +89,7 @@ export class TagsListComponent {
       .then(() => {
         this.modalService.showDeleted('Tag erfolgreich entfernt');
         this.loadTags();
+        this.selection.clear();
       })
       .catch((error) => {
         this.modalService.showError('Fehler beim Löschen des Tags');

@@ -1,9 +1,9 @@
-import { SelectionModel } from '@angular/cdk/collections';
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import moment from 'moment';
 import { lastValueFrom } from 'rxjs';
@@ -15,6 +15,7 @@ import { ModalService } from '../../../../core/services/modal.service';
   selector: 'app-categories-list',
   standalone: true,
   imports: [
+    CommonModule,
     MatTableModule,
     MatCheckboxModule,
     MatButtonModule,
@@ -26,16 +27,8 @@ import { ModalService } from '../../../../core/services/modal.service';
 })
 export class CategoriesListComponent {
   moment = moment;
-  displayedColumns: string[] = [
-    'select',
-    'id',
-    'name',
-    'createdAt',
-    'updatedAt',
-    'actions',
-  ];
-  dataSource = new MatTableDataSource<ICategory>([]);
-  selection = new SelectionModel<ICategory>(true, []);
+  categories: ICategory[] = [];
+  selectedCategories: Set<number> = new Set();
   categoryService = inject(CategoryService);
   modalService = inject(ModalService);
 
@@ -43,64 +36,67 @@ export class CategoriesListComponent {
     this.loadCategories();
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+  isAllSelected(): boolean {
+    return (
+      this.selectedCategories.size === this.categories.length &&
+      this.categories.length > 0
+    );
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
+  toggleAllRows(event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.categories.forEach((category) =>
+        this.selectedCategories.add(category.id)
+      );
+    } else {
+      this.selectedCategories.clear();
     }
-
-    this.selection.select(...this.dataSource.data);
   }
 
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: ICategory): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+  toggleRowSelection(categoryId: number): void {
+    if (this.selectedCategories.has(categoryId)) {
+      this.selectedCategories.delete(categoryId);
+    } else {
+      this.selectedCategories.add(categoryId);
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} `;
   }
 
   loadCategories() {
-    this.categoryService.getCategories().subscribe((categories) => {
-      this.dataSource.data = categories;
+    this.categoryService.getCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+      },
+      error: (error) => {
+        console.error('Error fetching categories:', error);
+      },
+      complete: () => {
+        console.log('Categories loading completed');
+      },
     });
   }
 
   deleteSelectedCategories() {
-    const selectedCategories = this.selection.selected;
+    const selectedCategories = Array.from(this.selectedCategories);
     const selectedCategoryIds = selectedCategories.map(
-      (category) => category.id
+      (categoryId) => categoryId
     );
 
-    const confirmation = confirm(
-      'Möchtest du die ausgewählten Kategorien wirklich löschen? Dadurch werden auch alle zugehörigen Posts, Tags und Kommentare unwiderruflich gelöscht.'
-    );
+    let promises = selectedCategoryIds.map((id) => {
+      let ob = this.categoryService.deleteCategory(id);
+      // convert into promise
+      return lastValueFrom(ob);
+    });
 
-    if (confirmation) {
-      let promises = selectedCategoryIds.map((id) => {
-        let ob = this.categoryService.deleteCategory(id);
-        // convert into promise
-        return lastValueFrom(ob);
+    Promise.all(promises)
+      .then(() => {
+        this.modalService.showDeleted('Kategorie erfolgreich entfernt');
+        this.loadCategories();
+        this.selectedCategories.clear();
+      })
+      .catch((error) => {
+        this.modalService.showError('Fehler beim Löschen der Kategorie');
+        console.error('Delete error:', error);
       });
-
-      Promise.all(promises)
-        .then(() => {
-          this.modalService.showDeleted('Kategorie erfolgreich entfernt');
-          this.loadCategories();
-          this.selection.clear();
-        })
-        .catch((error) => {
-          this.modalService.showError('Fehler beim Löschen der Kategorie');
-          console.error('Delete error:', error);
-        });
-    }
   }
 }

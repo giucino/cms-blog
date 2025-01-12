@@ -93,7 +93,7 @@ export const updateCategoryController = async (
   const categoryBySlug = await getCategoryBySlug(slug);
 
   if (categoryBySlug) {
-    res.status(400).json({ message: "Category already exists" });
+    res.status(400).json({ message: "Nothing was changed" });
   }
   // check if category exist by the given id
   let dbCategory = await getCategoryById(id);
