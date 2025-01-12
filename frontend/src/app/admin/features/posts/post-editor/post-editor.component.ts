@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
   FormArray,
@@ -7,19 +8,19 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IPost } from '../../../../core/interfaces/models/post.model.interface';
-import { PostService } from '../../../../core/services/post.service';
-import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
-import { CategoryService } from '../../../../core/services/category.service';
-import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
+import { IPost } from '../../../../core/interfaces/models/post.model.interface';
 import { ITag } from '../../../../core/interfaces/models/tag.model.interface';
+import { CategoryService } from '../../../../core/services/category.service';
+import { ModalService } from '../../../../core/services/modal.service';
+import { PostService } from '../../../../core/services/post.service';
 import { TagService } from '../../../../core/services/tag.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-post-editor',
@@ -45,6 +46,7 @@ export class PostEditorComponent {
   tagService = inject(TagService);
   router = inject(Router);
   route = inject(ActivatedRoute);
+  modalService = inject(ModalService);
   post: IPost | undefined;
   categories: ICategory[] = [];
   tags: ITag[] = [];
@@ -118,6 +120,7 @@ export class PostEditorComponent {
         tagIds: this.form.value.tagIds as any[],
       })
       .subscribe(() => {
+        this.modalService.showCreated('Post erfolgreich erstellt');
         this.router.navigate(['/admin/posts']);
       });
   }
@@ -133,8 +136,15 @@ export class PostEditorComponent {
         categoryId: this.form.value.categoryId!,
         tagIds: this.form.value.tagIds as any[],
       })
-      .subscribe(() => {
-        alert('Post updated');
+      .subscribe({
+        next: () => {
+          this.modalService.showCreated('Post erfolgreich aktualisiert');
+          this.router.navigate(['/admin/posts']);
+        },
+        error: (error) => {
+          this.modalService.showError('Fehler beim Aktualisieren des Posts');
+          console.error('Update error:', error);
+        },
       });
   }
 
@@ -142,7 +152,6 @@ export class PostEditorComponent {
     const tagIdsFormArray = this.form.get('tagIds') as FormArray;
     tagIdsFormArray.push(this.fb.control(tagId));
     // alert(JSON.stringify(tagId));
-    // hide tags dropdown
     this.showTagsDropdown = false;
   }
 

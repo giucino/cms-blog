@@ -4,12 +4,9 @@ import {
   ElementRef,
   EventEmitter,
   HostListener,
-  Input,
   Output,
   ViewChild,
 } from '@angular/core';
-
-// import { ModalConfig } from '../../services/modal.service';
 import { ModalConfig } from '../../interfaces/models/types.model.interface';
 
 @Component({
@@ -20,7 +17,6 @@ import { ModalConfig } from '../../interfaces/models/types.model.interface';
   styleUrl: './success-modal.component.scss',
 })
 export class SuccessModalComponent {
-  // @Input() config!: ModalConfig;
   config: ModalConfig | null = null;
   @Output() close = new EventEmitter<void>();
   isVisible: boolean = false;
@@ -40,7 +36,6 @@ export class SuccessModalComponent {
   }
 
   openModal(config: ModalConfig) {
-    // this.message = message;
     this.config = config;
     this.isVisible = true;
     setTimeout(() => this.closeButton.nativeElement.focus(), 0);

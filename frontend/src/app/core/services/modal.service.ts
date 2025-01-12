@@ -84,6 +84,7 @@ import {
 import { BehaviorSubject } from 'rxjs';
 import { SuccessModalComponent } from '../components/success-modal/success-modal.component';
 import { ModalConfig } from '../interfaces/models/types.model.interface';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
@@ -97,7 +98,7 @@ export class ModalService {
 
   private modalComponentRef: ComponentRef<SuccessModalComponent> | null = null;
 
-  constructor(private appRef: ApplicationRef, private injector: Injector) {}
+  constructor(private appRef: ApplicationRef, private injector: Injector, private sanitizer: DomSanitizer) {}
 
   openModal(config: ModalConfig) {
     this.modalConfigSubject.next(config);
@@ -146,15 +147,21 @@ export class ModalService {
 
     const modalInstance = this.modalComponentRef.instance;
     const config: ModalConfig = {
-      title: this.getTitleForState(state),
       message: message,
-      iconPath: this.getIconPathForState(state),
-      iconClass: this.getIconClassForState(state),
-      iconBackgroundClass: this.getIconBackgroundClassForState(state),
+      iconConfig: {
+        path: this.getSafeIconPathForState(state),
+        class: this.getIconClassForState(state),
+        backgroundClass: this.getIconBackgroundClassForState(state),
+        ariaHidden: 'true',
+        fill: 'currentColor',
+        viewBox: '0 0 20 20',
+        xmlns: 'http://www.w3.org/2000/svg'
+      },
       textClass: 'mb-4 text-lg font-semibold text-gray-900 dark:text-white',
       buttonClass: this.getButtonClassForState(state),
       confirmButtonText: 'Weiter',
-      state: state
+      state: state,
+      srOnlyText: this.getSrOnlyTextForState(state)
     };
 
     modalInstance.openModal(config);
@@ -162,6 +169,11 @@ export class ModalService {
     modalInstance.close.subscribe(() => {
       this.removeExistingModal();
     });
+  }
+
+    private getSafeIconPathForState(state: 'created' | 'updated' | 'deleted' | 'error'): SafeHtml {
+    const rawPath = this.getIconPathForState(state);
+    return this.sanitizer.bypassSecurityTrustHtml(rawPath);
   }
 
   private getIconPathForState(state: 'created' | 'updated' | 'deleted' | 'error'): string {
@@ -176,12 +188,16 @@ export class ModalService {
     }
   }
 
-  private getTitleForState(state: 'created' | 'updated' | 'deleted' | 'error'): string {
+  private getSrOnlyTextForState(state: 'created' | 'updated' | 'deleted' | 'error'): string {
     switch (state) {
-      case 'created': return 'Erfolgreich erstellt';
-      case 'updated': return 'Erfolgreich aktualisiert';
-      case 'deleted': return 'Erfolgreich gelöscht';
-      case 'error': return 'Fehler';
+      case 'created':
+        return 'Erfolg';
+      case 'updated':
+        return 'Erfolg';
+      case 'deleted':
+        return 'Löschen';
+      case 'error':
+        return 'Fehler';
     }
   }
 

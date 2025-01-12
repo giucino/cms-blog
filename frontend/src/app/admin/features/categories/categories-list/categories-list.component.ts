@@ -1,33 +1,43 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, inject } from '@angular/core';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
-import moment from 'moment';
-import { CategoryService } from '../../../../core/services/category.service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
-import { lastValueFrom } from 'rxjs';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
+import moment from 'moment';
+import { lastValueFrom } from 'rxjs';
+import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
+import { CategoryService } from '../../../../core/services/category.service';
 import { ModalService } from '../../../../core/services/modal.service';
-
 
 @Component({
   selector: 'app-categories-list',
   standalone: true,
   imports: [
-    MatTableModule, MatCheckboxModule, MatButtonModule, MatIcon, RouterModule
+    MatTableModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatIcon,
+    RouterModule,
   ],
   templateUrl: './categories-list.component.html',
-  styleUrl: './categories-list.component.scss'
+  styleUrl: './categories-list.component.scss',
 })
 export class CategoriesListComponent {
   moment = moment;
-  displayedColumns: string[] = ['select', 'id', 'name', 'createdAt', 'updatedAt', 'actions'];
+  displayedColumns: string[] = [
+    'select',
+    'id',
+    'name',
+    'createdAt',
+    'updatedAt',
+    'actions',
+  ];
   dataSource = new MatTableDataSource<ICategory>([]);
   selection = new SelectionModel<ICategory>(true, []);
-  categoryService = inject(CategoryService)
-  modalService = inject(ModalService)
+  categoryService = inject(CategoryService);
+  modalService = inject(ModalService);
 
   constructor() {
     this.loadCategories();
@@ -59,26 +69,25 @@ export class CategoriesListComponent {
   }
 
   loadCategories() {
-    this.categoryService.getCategories().subscribe(categories => {
-      this.dataSource.data = categories
+    this.categoryService.getCategories().subscribe((categories) => {
+      this.dataSource.data = categories;
     });
   }
 
   deleteSelectedCategories() {
     const selectedCategories = this.selection.selected;
-    const selectedCategoryIds = selectedCategories.map(category => category.id);
-    let promises =
-      selectedCategoryIds.map((id) => {
-        let ob = this.categoryService.deleteCategory(id);
-        // convert into promise
-        return lastValueFrom(ob)
-      });
+    const selectedCategoryIds = selectedCategories.map(
+      (category) => category.id
+    );
+    let promises = selectedCategoryIds.map((id) => {
+      let ob = this.categoryService.deleteCategory(id);
+      // convert into promise
+      return lastValueFrom(ob);
+    });
 
-      Promise.all(promises).then(()=>{
-        this.modalService.show('Der Eintrag wurde erfolgreich gelöscht.', 'deleted');
-        console.log('deleted')
-        // this.modalService.show('Kategorie erfolgreich entfernt')
-        this.loadCategories();
-      });
+    Promise.all(promises).then(() => {
+      this.modalService.showDeleted('Kategorie erfolgreich entfernt');
+      this.loadCategories();
+    });
   }
 }

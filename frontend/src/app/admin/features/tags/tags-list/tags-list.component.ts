@@ -11,6 +11,7 @@ import { lastValueFrom } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { ITag } from '../../../../core/interfaces/models/tag.model.interface';
 import { TagService } from '../../../../core/services/tag.service';
+import { ModalService } from '../../../../core/services/modal.service';
 
 @Component({
   selector: 'app-tags-list',
@@ -38,6 +39,7 @@ export class TagsListComponent {
   dataSource = new MatTableDataSource<ITag>([]);
   selection = new SelectionModel<ITag>(true, []);
   tagService = inject(TagService);
+  modalService = inject(ModalService);
 
   constructor() {
     this.loadTags();
@@ -84,6 +86,7 @@ export class TagsListComponent {
     });
 
     Promise.all(promises).then(() => {
+      this.modalService.showDeleted('Tag erfolgreich entfernt');
       this.loadTags();
     });
   }

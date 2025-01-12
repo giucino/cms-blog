@@ -63,8 +63,7 @@ export class CategoryEditorComponent implements OnInit {
     this.categoryService
       .addCategory({ name: this.form.value.name! })
       .subscribe(() => {
-        this.modalService.show('Der Eintrag wurde erfolgreich gespeichert.', 'created');
-        // this.modalService.show('Kategorie erfolgreich erstellt')
+        this.modalService.showCreated('Kategorie erfolgreich erstellt');
         this.router.navigate(['/admin/categories']);
       });
   }
@@ -83,7 +82,7 @@ export class CategoryEditorComponent implements OnInit {
           this.router.navigate(['/admin/categories']);
         },
         error: (error) => {
-          // this.modalService.show('Fehler beim Aktualisieren der Kategorie');
+          this.modalService.showError('Fehler beim Aktualisieren der Kategorie');
           console.error('Update error:', error);
         }
       });

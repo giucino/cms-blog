@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ITag } from '../../../../core/interfaces/models/tag.model.interface';
 import { TagService } from '../../../../core/services/tag.service';
+import { ModalService } from '../../../../core/services/modal.service';
 
 @Component({
   selector: 'app-tags-editor',
@@ -16,57 +17,66 @@ import { TagService } from '../../../../core/services/tag.service';
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
-    MatCardModule
+    MatCardModule,
   ],
   templateUrl: './tag-editor.component.html',
-  styleUrl: './tag-editor.component.scss'
+  styleUrl: './tag-editor.component.scss',
 })
 export class TagEditorComponent {
-
   fb = inject(FormBuilder);
   tagService = inject(TagService);
   router = inject(Router);
-  route = inject(ActivatedRoute)
+  route = inject(ActivatedRoute);
+  modalService = inject(ModalService);
   tag: ITag | undefined;
 
   form = this.fb.group({
     name: ['', Validators.required],
-    id: ['']
-  })
+    id: [''],
+  });
 
-  constructor(){
-    this.route.params.subscribe((data)=>{
+  constructor() {
+    this.route.params.subscribe((data) => {
       const slug = data['slug'];
-      if(slug){
-        this.tagService.getTag(slug).subscribe((tag)=>{
+      if (slug) {
+        this.tagService.getTag(slug).subscribe((tag) => {
           this.tag = tag;
           this.form.patchValue({
-            id: tag.id+'',
-            name: tag.name
-          })
+            id: tag.id + '',
+            name: tag.name,
+          });
           this.form.updateValueAndValidity();
         });
       }
     });
   }
 
-  create(){
-    if(this.form.invalid)return;
+  create() {
+    if (this.form.invalid) return;
 
-    this.tagService.addTag({name: this.form.value.name!}).subscribe(() => {
-      this.router.navigate(['/admin/tags'])
-    })
-  }
-
-  update(){
-    if(this.form.invalid) return;
-
-    this.tagService.updateTag({
-      id: parseInt(this.form.value.id!),
-      name: this.form.value.name!
-    }).subscribe(() => {
-      alert('Tag updated');
+    this.tagService.addTag({ name: this.form.value.name! }).subscribe(() => {
+      this.modalService.showCreated('Tag erfolgreich erstellt');
+      this.router.navigate(['/admin/tags']);
     });
   }
 
+  update() {
+    if (this.form.invalid) return;
+
+    this.tagService
+      .updateTag({
+        id: parseInt(this.form.value.id!),
+        name: this.form.value.name!,
+      })
+      .subscribe({ next: 
+        () => {
+        this.modalService.showCreated('Tag erfolgreich aktualisiert');
+        this.router.navigate(['/admin/tags']);
+        },
+        error: (error) => {
+          this.modalService.showError('Fehler beim Aktualisieren des Tags');
+          console.error('Update error:', error);
+        }
+      });
+  }
 }
