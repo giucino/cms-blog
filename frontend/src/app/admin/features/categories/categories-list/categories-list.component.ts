@@ -1,9 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIcon } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import moment from 'moment';
 import { lastValueFrom } from 'rxjs';
@@ -16,10 +12,6 @@ import { ModalService } from '../../../../core/services/modal.service';
   standalone: true,
   imports: [
     CommonModule,
-    MatTableModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatIcon,
     RouterModule,
   ],
   templateUrl: './categories-list.component.html',

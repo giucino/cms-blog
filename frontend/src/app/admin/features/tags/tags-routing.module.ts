@@ -11,7 +11,7 @@ const routes: Routes = [
     path:'add', component: TagEditorComponent
   },
   {
-    path:':slug', component: TagEditorComponent
+    path:'edit/:slug', component: TagEditorComponent
   }
 ];
 

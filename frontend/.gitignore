@@ -48,5 +48,7 @@ src/app/core/services/dark-mode.service.ts
 src/app/core/services/postcopy.service.ts
 src/app/admin/features/categories/categories-list/copycategories-list.component.ts
 src/app/admin/features/categories/categories-list/copycategories-list.component.html
-src/app/admin/features/posts/posts-list/copyposts-list.component.html
 src/app/admin/features/posts/posts-list/copyposts-list.component.ts
+src/app/admin/features/posts/posts-list/copyposts-list.component.html
+src/app/admin/features/tags/tags-list/copytags-list.component.ts
+src/app/admin/features/tags/tags-list/copytags-list.component.html

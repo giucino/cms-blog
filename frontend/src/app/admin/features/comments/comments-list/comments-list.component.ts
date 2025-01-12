@@ -1,23 +1,17 @@
-import { SelectionModel } from '@angular/cdk/collections';
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIcon } from '@angular/material/icon';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import moment from 'moment';
 import { lastValueFrom } from 'rxjs';
 import { IComment } from '../../../../core/interfaces/models/comment.model.interface';
 import { CommentService } from '../../../../core/services/comment.service';
+import { ModalService } from '../../../../core/services/modal.service';
 
 @Component({
   selector: 'app-comments-list',
   standalone: true,
   imports: [
-    MatTableModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatIcon,
+    CommonModule,
     RouterModule,
   ],
   templateUrl: './comments-list.component.html',
@@ -25,18 +19,12 @@ import { CommentService } from '../../../../core/services/comment.service';
 })
 export class CommentsListComponent {
   moment = moment;
-  displayedColumns: string[] = [
-    'select',
-    'id',
-    'content',
-    'createdAt',
-    'updatedAt',
-  ];
-  dataSource = new MatTableDataSource<IComment>([]);
-  selection = new SelectionModel<IComment>(true, []);
+  comments: IComment[] = [];
+  selectedComments: Set<number> = new Set();
   commentService = inject(CommentService);
   route = inject(ActivatedRoute);
   postId?: number;
+  modalService = inject(ModalService);
 
   constructor() {
     this.route.params.subscribe((params) => {
@@ -46,40 +34,50 @@ export class CommentsListComponent {
     });
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+  isAllSelected(): boolean {
+    return (
+      this.selectedComments.size === this.comments.length &&
+      this.comments.length > 0
+    );
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
+  toggleAllRows(event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.comments.forEach((comment) =>
+        this.selectedComments.add(comment.id)
+      );
+    } else {
+      this.selectedComments.clear();
     }
-
-    this.selection.select(...this.dataSource.data);
   }
 
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: IComment): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+  toggleRowSelection(commentId: number): void {
+    if (this.selectedComments.has(commentId)) {
+      this.selectedComments.delete(commentId);
+    } else {
+      this.selectedComments.add(commentId);
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} `;
   }
 
   loadComments() {
-    this.commentService.getComments(this.postId!).subscribe((comments) => {
-      this.dataSource.data = comments;
+    this.commentService.getComments(this.postId!).subscribe({
+      next: (comments) => {
+        this.comments = comments;
+      },
+      error: (error) => {
+        console.error('Error fetching comments:', error);
+      },
+      complete: () => {
+        console.log('Comments loading completed');
+      },
     });
   }
 
   deleteSelectedComments() {
-    const selectedComments = this.selection.selected;
-    const selectedCommentIds = selectedComments.map((category) => category.id);
+    const selectedComments = Array.from(this.selectedComments);
+    const selectedCommentIds = selectedComments.map((commentId) => commentId);
+
     let promises = selectedCommentIds.map((id) => {
       let ob = this.commentService.deleteComment(id);
       // convert into promise
@@ -87,7 +85,13 @@ export class CommentsListComponent {
     });
 
     Promise.all(promises).then(() => {
+      this.modalService.showDeleted('Kommentar erfolgreich entfernt');
       this.loadComments();
+      this.selectedComments.clear();
+    })
+    .catch((error) => {
+      this.modalService.showError('Fehler beim Löschen des Kommentars');
+      console.error('Delete error:', error);
     });
   }
 }

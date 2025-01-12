@@ -1,17 +1,3 @@
-<!-- <div class="p-5">
-    <h1 class="text-left">Tags</h1>
-
-    <div class="flex justify-between items-center mb-5">
-        <button mat-raised-button routerLink="/admin/tags/add">Create</button>
-        <button
-            (click)="deleteSelectedTags()"
-        [disabled]="!selection.hasValue()"
-         mat-raised-button color="warn">Delete 
-
-            <mat-icon>delete</mat-icon>
-        </button>
-    </div> -->
-
 <section class="bg-white dark:bg-gray-900">
     <div class="py-4 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <h1 class="text-left text-2xl font-bold mb-5 text-gray-900 dark:text-white">Tags</h1>
@@ -20,7 +6,7 @@
             <button
                 class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
                 routerLink="/admin/tags/add">Create</button>
-            <button (click)="deleteSelectedTags()" [disabled]="!selection.hasValue()"
+            <button (click)="deleteSelectedTags()" [disabled]="selectedTags.size === 0"
                 class="bg-red-500 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-white focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none dark:focus:ring-red-800">
                 Delete
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
@@ -32,57 +18,90 @@
         </div>
 
 
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="p-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" (change)="toggleAllRows($event)" [checked]="isAllSelected()"
+                                    class="w-4 h-4 text-primary-700 bg-gray-100 border-gray-300 rounded focus:ring-primary-300 dark:focus:ring-primary-800 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label class="sr-only">checkbox</label>
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3">ID</th>
+                        <th scope="col" class="px-6 py-3">Name</th>
+                        <th scope="col" class="px-6 py-3">Created At</th>
+                        <th scope="col" class="px-6 py-3">Updated At</th>
+                        <th scope="col" class="px-6 py-3">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let tag of tags"
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                        (click)="toggleRowSelection(tag.id)">
+                        <td class="w-4 p-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" (click)="$event.stopPropagation()"
+                                    (change)="toggleRowSelection(tag.id)"
+                                    [checked]="selectedTags.has(tag.id)"
+                                    class="w-4 h-4 text-primary-700 bg-gray-100 border-gray-300 rounded focus:ring-primary-300 dark:focus:ring-primary-800 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                <label class="sr-only">checkbox</label>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4">{{tag.id}}</td>
+                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{tag.name}}
+                        </td>
+                        <td class="px-6 py-4">{{moment(tag.createdAt).fromNow()}}</td>
+                        <td class="px-6 py-4">{{moment(tag.updatedAt).fromNow()}}</td>
+                        <td class="px-6 py-4">
+                            <a [routerLink]="['/admin/tags/edit', tag.slug]"
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                (click)="$event.stopPropagation()">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-            <!-- Checkbox Column -->
-            <ng-container matColumnDef="select">
-                <th mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox color="primary" (change)="$event ? toggleAllRows() : null"
-                        [checked]="selection.hasValue() && isAllSelected()"
-                        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
-                    </mat-checkbox>
-                </th>
-                <td mat-cell *matCellDef="let row">
-                    <mat-checkbox (click)="$event.stopPropagation()" color="primary"
-                        (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
-                        [aria-label]="checkboxLabel(row)">
-                    </mat-checkbox>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef> ID. </th>
-                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef> Name </th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="createdAt">
-                <th mat-header-cell *matHeaderCellDef> Created At </th>
-                <td mat-cell *matCellDef="let element"> {{moment(element.createdAt).fromNow()}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="updatedAt">
-                <th mat-header-cell *matHeaderCellDef> Updated At </th>
-                <td mat-cell *matCellDef="let element"> {{moment(element.updatedAt).fromNow()}} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="actions">
-                <th mat-header-cell *matHeaderCellDef> Actions </th>
-                <td mat-cell *matCellDef="let element">
-                    <button mat-icon-button [routerLink]="['/admin/tags', element.slug]">
-                        <mat-icon>edit</mat-icon>
-                    </button>
-                </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
-            </tr>
-        </table>
-
+        <!-- <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
+        <span
+            class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing
+            <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span
+                class="font-semibold text-gray-900 dark:text-white">1000</span></span>
+        <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+            <li>
+                <a href="#" aria-current="page"
+                    class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+            </li>
+            <li>
+                <a href="#"
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+            </li>
+            <li>
+                <a href="#"
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
+            </li>
+            <li>
+                <a href="#"
+                    class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
+            </li>
+            <li>
+                <a href="#"
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
+            </li>
+            <li>
+                <a href="#"
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
+            </li>
+            <li>
+                <a href="#"
+                    class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+            </li>
+        </ul>
+    </nav> -->
     </div>
 </section>

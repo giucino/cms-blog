@@ -1,26 +1,17 @@
-import { SelectionModel } from '@angular/cdk/collections';
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
-import moment from 'moment';
-import { CategoryService } from '../../../../core/services/category.service';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { lastValueFrom } from 'rxjs';
 import { RouterModule } from '@angular/router';
+import moment from 'moment';
+import { lastValueFrom } from 'rxjs';
 import { ITag } from '../../../../core/interfaces/models/tag.model.interface';
-import { TagService } from '../../../../core/services/tag.service';
 import { ModalService } from '../../../../core/services/modal.service';
+import { TagService } from '../../../../core/services/tag.service';
 
 @Component({
   selector: 'app-tags-list',
   standalone: true,
   imports: [
-    MatTableModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatIcon,
+    CommonModule,
     RouterModule,
   ],
   templateUrl: './tags-list.component.html',
@@ -28,16 +19,8 @@ import { ModalService } from '../../../../core/services/modal.service';
 })
 export class TagsListComponent {
   moment = moment;
-  displayedColumns: string[] = [
-    'select',
-    'id',
-    'name',
-    'createdAt',
-    'updatedAt',
-    'actions',
-  ];
-  dataSource = new MatTableDataSource<ITag>([]);
-  selection = new SelectionModel<ITag>(true, []);
+  tags: ITag[] = [];
+  selectedTags: Set<number> = new Set();
   tagService = inject(TagService);
   modalService = inject(ModalService);
 
@@ -45,40 +28,45 @@ export class TagsListComponent {
     this.loadTags();
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+  isAllSelected(): boolean {
+    return this.selectedTags.size === this.tags.length && this.tags.length > 0;
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  toggleAllRows() {
-    if (this.isAllSelected()) {
-      this.selection.clear();
-      return;
+  toggleAllRows(event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.tags.forEach((tag) => this.selectedTags.add(tag.id));
+    } else {
+      this.selectedTags.clear();
     }
-
-    this.selection.select(...this.dataSource.data);
   }
 
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: ITag): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+  toggleRowSelection(tagId: number): void {
+    if (this.selectedTags.has(tagId)) {
+      this.selectedTags.delete(tagId);
+    } else {
+      this.selectedTags.add(tagId);
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} `;
   }
 
   loadTags() {
-    this.tagService.getTags().subscribe((tags) => {
-      this.dataSource.data = tags;
+    this.tagService.getTags().subscribe({
+      next: (tags) => {
+        this.tags = tags;
+      },
+      error: (error) => {
+        console.error('Error fetching tags:', error);
+      },
+      complete: () => {
+        console.log('Tags loading completed');
+      },
     });
   }
 
   deleteSelectedTags() {
-    const selectedTags = this.selection.selected;
-    const selectedTagIds = selectedTags.map((category) => category.id);
+    const selectedTags = Array.from(this.selectedTags);
+    const selectedTagIds = selectedTags.map((tagId) => tagId);
+
     let promises = selectedTagIds.map((id) => {
       let ob = this.tagService.deleteTag(id);
       // convert into promise
@@ -89,7 +77,7 @@ export class TagsListComponent {
       .then(() => {
         this.modalService.showDeleted('Tag erfolgreich entfernt');
         this.loadTags();
-        this.selection.clear();
+        this.selectedTags.clear();
       })
       .catch((error) => {
         this.modalService.showError('Fehler beim Löschen des Tags');
