@@ -26,7 +26,7 @@
                         <label for="title"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
                         <input formControlName="title" type="text" name="title" value="title"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            class="focus:outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                             placeholder="Title">
                              <!-- <p *ngIf="form.get('title')?.invalid && form.get('title')?.touched" class="mt-2 text-sm text-red-600 dark:text-red-500">
                             Please enter a valid title
@@ -37,7 +37,7 @@
                         <label for="category"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select Category</label>
                         <select formControlName="categoryId" placeholder="Select Category"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            class="focus:outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                             @for(category of categories; track category.id){
                             <option [value]="category.id">{{category.name}}</option>
                             }
@@ -51,7 +51,7 @@
                         <label for="content"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Content</label>
                         <textarea formControlName="content" rows="5"
-                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                            class="focus:outline-none block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                             placeholder="Content..."></textarea>
                             <!-- <p *ngIf="form.get('content')?.invalid && form.get('content')?.touched" class="mt-2 text-sm text-red-600 dark:text-red-500">
                             Please enter valid content
@@ -62,7 +62,7 @@
                         <label for="tag" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select
                             Tag</label>
                         <select (change)="addTag($event)"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+                            class="focus:outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                             <option value="">Select Tag</option>
                             @for(tag of tags; track tag.id){
                             <option [value]="tag.id">{{tag.name}}</option>
