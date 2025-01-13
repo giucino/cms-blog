@@ -1,14 +1,14 @@
 <section class="bg-white dark:bg-gray-900">
     <div class="py-4 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-        <h1 class="text-left text-2xl font-bold mb-5 text-gray-900 dark:text-white">Categories</h1>
+        <h1 class="text-left text-2xl font-bold mb-5 text-gray-900 dark:text-white">Kategorien</h1>
 
         <div class="flex justify-between items-center mb-5">
             <button
                 class="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-                routerLink="/admin/categories/add">Create</button>
+                routerLink="/admin/categories/add">Erstellen</button>
             <button (click)="deleteSelectedCategories()" [disabled]="selectedCategories.size === 0"
                 class="bg-red-500 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center text-white focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 focus:outline-none dark:focus:ring-red-800">
-                Delete
+                Löschen
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd"
                         d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
@@ -30,9 +30,9 @@
                         </th>
                         <th scope="col" class="px-6 py-3">ID</th>
                         <th scope="col" class="px-6 py-3">Name</th>
-                        <th scope="col" class="px-6 py-3">Created At</th>
-                        <th scope="col" class="px-6 py-3">Updated At</th>
-                        <th scope="col" class="px-6 py-3">Actions</th>
+                        <th scope="col" class="px-6 py-3">Erstellt am</th>
+                        <th scope="col" class="px-6 py-3">Aktualisiert am</th>
+                        <th scope="col" class="px-6 py-3">Aktionen</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -52,13 +52,23 @@
                         <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{category.name}}
                         </td>
-                        <td class="px-6 py-4">{{moment(category.createdAt).fromNow()}}</td>
-                        <td class="px-6 py-4">{{moment(category.updatedAt).fromNow()}}</td>
+                        <td class="px-6 py-4"><time [attr.datetime]="category.createdAt"
+                                [attr.title]="moment(category.createdAt).format('LL')">
+                                {{ moment(category.createdAt).isBefore(moment().subtract(24, 'hours'))
+                                ? moment(category.createdAt).format('LL')
+                                : moment(category.createdAt).fromNow() }}</time></td>
+                        <td class="px-6 py-4"><time [attr.datetime]="category.updatedAt"
+                                [attr.title]="moment(category.updatedAt).format('LL')">
+                                {{ moment(category.updatedAt).isBefore(moment().subtract(24, 'hours'))
+                                ? moment(category.updatedAt).format('LL')
+                                : moment(category.updatedAt).fromNow() }}</time>
+                        </td>
+
                         <td class="px-6 py-4">
                             <a [routerLink]="['/admin/categories/edit', category.slug]"
                                 class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                                 (click)="$event.stopPropagation()">
-                                Edit
+                                Bearbeiten
                             </a>
                         </td>
                     </tr>
