@@ -56,7 +56,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       })
       .subscribe({
         next: () => {
-          console.log('logged in');
           this.router.navigate(['/']);
         },
         error: (err) => {
@@ -77,7 +76,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.errorMessage = null;
     this.authService.guestLogin().subscribe({
       next: () => {
-        console.log('Guest logged in');
         this.router.navigate(['/']);
       },
       error: (err) => {

@@ -69,7 +69,7 @@ export class CommentsListComponent {
         console.error('Error fetching comments:', error);
       },
       complete: () => {
-        console.log('Comments loading completed');
+        // console.log('Comments loading completed');
       },
     });
   }

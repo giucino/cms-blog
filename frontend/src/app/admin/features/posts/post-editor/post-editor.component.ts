@@ -123,12 +123,9 @@ export class PostEditorComponent {
         next: () => {
           this.modalService.showCreated('Post erfolgreich erstellt');
           this.router.navigate(['/admin/posts']);
-          console.log(this.form.value);
         },
         error: (error) => {
           this.modalService.showError('Fehler beim Erstellen des Posts');
-          console.log(this.form.value);
-
         },
       });
   }
@@ -148,14 +145,10 @@ export class PostEditorComponent {
         next: () => {
           this.modalService.showUpdated('Post erfolgreich aktualisiert');
           this.router.navigate(['/admin/posts']);
-          console.log(this.form.value);
-
         },
         error: (error) => {
           this.modalService.showError('Fehler beim Aktualisieren des Posts');
           console.error('Update error:', error);
-          console.log(this.form.value);
-
         },
       });
   }

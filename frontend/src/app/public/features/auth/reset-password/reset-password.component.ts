@@ -86,7 +86,6 @@ export class ResetPasswordComponent {
       })
       .subscribe({
         next: () => {
-          console.log('reset password');
           this.router.navigate(['/auth/login']);
         },
         error: (err) => {

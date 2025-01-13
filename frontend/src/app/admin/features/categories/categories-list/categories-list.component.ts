@@ -63,7 +63,7 @@ export class CategoriesListComponent {
         console.error('Error fetching categories:', error);
       },
       complete: () => {
-        console.log('Categories loading completed');
+        // console.log('Categories loading completed');
       },
     });
   }

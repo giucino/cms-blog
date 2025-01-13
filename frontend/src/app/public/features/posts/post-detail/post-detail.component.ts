@@ -167,10 +167,9 @@ export class PostDetailComponent implements OnInit, AfterContentInit {
       },
       error: (error) => {
         console.error('Error loading public post details:', error);
-        // Here you can handle the error
-      },
+          // Hier können Sie eine Fehlerbehandlung hinzufügen
+        },
       complete: () => {
-        console.log('Public post details loading completed');
       }
     });
   }

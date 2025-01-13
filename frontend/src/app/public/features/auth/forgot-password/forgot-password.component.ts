@@ -48,7 +48,6 @@ export class ForgotPasswordComponent implements OnInit, OnDestroy {
     this.errorMessage = null;
     this.authService.forgotPassword(this.form.value.email!).subscribe({
       next: () => {
-        console.log('forgot password');
         this.router.navigate(['/auth/login']);
       },
       error: (err) => {

@@ -42,7 +42,6 @@ export class PostsListComponent implements AfterContentInit {
           // Hier können Sie eine Fehlerbehandlung hinzufügen
         },
         complete: () => {
-          console.log('Public posts loading completed');
         },
       });
   }

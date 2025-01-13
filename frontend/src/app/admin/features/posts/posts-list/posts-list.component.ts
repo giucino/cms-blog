@@ -58,7 +58,6 @@ export class PostsListComponent {
         // Add error handling here
       },
       complete: () => {
-        console.log('Admin posts loading completed');
       },
     });
   }

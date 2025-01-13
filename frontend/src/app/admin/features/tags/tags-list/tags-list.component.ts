@@ -58,7 +58,6 @@ export class TagsListComponent {
         console.error('Error fetching tags:', error);
       },
       complete: () => {
-        console.log('Tags loading completed');
       },
     });
   }
