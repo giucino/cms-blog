@@ -6,13 +6,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
 import { IPost } from '../../../../core/interfaces/models/post.model.interface';
@@ -25,18 +18,7 @@ import { TagService } from '../../../../core/services/tag.service';
 @Component({
   selector: 'app-post-editor',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatCardModule,
-    MatSelectModule,
-    MatChipsModule,
-    MatIconModule,
-    CommonModule,
-    RouterModule,
-  ],
+  imports: [ReactiveFormsModule, CommonModule, RouterModule],
   templateUrl: './post-editor.component.html',
   styleUrl: './post-editor.component.scss',
 })
@@ -50,7 +32,8 @@ export class PostEditorComponent {
   modalService = inject(ModalService);
   post: IPost | undefined;
   categories: ICategory[] = [];
-  tags: ITag[] = [];
+  allTags: ITag[] = [];
+  availableTags: ITag[] = [];
 
   form = this.fb.group({
     title: ['', Validators.required],
@@ -60,10 +43,9 @@ export class PostEditorComponent {
     tagIds: this.fb.array([]),
   });
 
-  get selectedTags() {
-    return this.tags.filter((tag) => {
-      return this.form.value.tagIds?.includes(tag.id);
-    });
+  get selectedTags(): ITag[] {
+    const tagIds = this.form.get('tagIds')?.value as number[];
+    return this.allTags.filter((tag) => tagIds.includes(tag.id));
   }
 
   constructor() {
@@ -88,9 +70,11 @@ export class PostEditorComponent {
             const tagIds = tags.map((tag) => tag.tagId);
 
             const tagIdsFormArray = this.form.get('tagIds') as FormArray;
+            tagIdsFormArray.clear(); // Clear existing tags
             tagIds.forEach((tagId) => {
               tagIdsFormArray.push(this.fb.control(tagId));
             });
+            this.updateAvailableTags();
           });
         });
       }
@@ -105,8 +89,16 @@ export class PostEditorComponent {
 
   loadTags() {
     this.tagService.getTags().subscribe((tags) => {
-      this.tags = tags;
+      this.allTags = tags;
+      this.updateAvailableTags();
     });
+  }
+
+  updateAvailableTags() {
+    const selectedTagIds = this.form.get('tagIds')?.value as number[];
+    this.availableTags = this.allTags.filter(
+      (tag) => !selectedTagIds.includes(tag.id)
+    );
   }
 
   create() {
@@ -126,6 +118,7 @@ export class PostEditorComponent {
         },
         error: (error) => {
           this.modalService.showError('Fehler beim Erstellen des Posts');
+          console.error('Create error:', error);
         },
       });
   }
@@ -153,28 +146,32 @@ export class PostEditorComponent {
       });
   }
 
-  // addTag(tagId: number) {
-  //   const tagIdsFormArray = this.form.get('tagIds') as FormArray;
-  //   tagIdsFormArray.push(this.fb.control(tagId));
-  //   // alert(JSON.stringify(tagId));
-  //   this.showTagsDropdown = false;
-  // }
+  //   // addTag(tagId: number) {
+  //   //   const tagIdsFormArray = this.form.get('tagIds') as FormArray;
+  //   //   tagIdsFormArray.push(this.fb.control(tagId));
+  //   //   // alert(JSON.stringify(tagId));
+  //   //   this.showTagsDropdown = false;
+  //   // }
 
   addTag(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    const tagId = Number(selectElement.value); // Extrahiere die ausgewählte Tag-ID
+    const tagId = Number(selectElement.value);
     if (!isNaN(tagId)) {
       const tagIdsFormArray = this.form.get('tagIds') as FormArray;
       tagIdsFormArray.push(this.fb.control(tagId));
+      this.updateAvailableTags();
     }
+    selectElement.value = ''; // Reset the select element
   }
 
   removeTag(tagId: number) {
     const tagIdsFormArray = this.form.get('tagIds') as FormArray;
-    const index = tagIdsFormArray.controls.findIndex((control) => {
-      return control.value === tagId;
-    });
-
-    tagIdsFormArray.removeAt(index);
+    const index = tagIdsFormArray.controls.findIndex(
+      (control) => control.value === tagId
+    );
+    if (index !== -1) {
+      tagIdsFormArray.removeAt(index);
+      this.updateAvailableTags();
+    }
   }
 }
