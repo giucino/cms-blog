@@ -1,82 +1,10 @@
-<!-- <form (submit)="submit()" class="card w-[400px]" [formGroup]="form">
-    <div>
-        <label for="name">Name</label>
-        <input formControlName="name" type="text" id="name" name="name" placeholder="Full Name">
-
-        @if(
-        form.get('name')?.touched &&
-        form.get('name')?.errors
-        ){
-        @if(form.get('name')?.errors?.['required']){
-        <div class="text-red-500">Name is required</div>
-        }
-        }
-
-    </div>
-
-    <div>
-        <label for="email">Email</label>
-        <input formControlName="email" type="email" id="email" name="email" placeholder="Email">
-        @if(
-        form.get('email')?.touched &&
-        form.get('email')?.errors
-        ){
-        @if(form.get('email')?.errors?.['required']){
-        <div class="text-red-500">Email is required</div>
-        }
-
-        @if(form.get('email')?.errors?.['email']){
-        <div class="text-red-500">
-            Email is invalid
-        </div>
-        }
-        }
-    </div>
-
-    <div>
-        <label for="password">Password</label>
-        <input formControlName="password" type="password" id="password" name="password" placeholder="Password">
-        @if(
-        form.get('password')?.touched &&
-        form.get('password')?.errors
-        ){
-        @if(form.get('password')?.errors?.['required']){
-        <div class="text-red-500">Password is required</div>
-        }
-
-        @if(form.get('password')?.errors?.['minlength']){
-        <div class="text-red-500">
-            Password must be at least {{
-            form.get('password')?.errors?.['minlength'].requiredLength
-            }} characters
-        </div>
-        }
-
-        @if(form.get('password')?.errors?.['pattern']){
-        <div class="text-red-500">
-            Password must contain at least one uppercase letter, one lowercase letter and one number.
-        </div>
-        }
-        }
-    </div>
-
-    <div class="flex justify-end mt-5">
-        <button [disabled]="!form.valid" type="submit">Register</button>
-
-    </div>
-
-    <div class="text-center mt-4 text-gray-600">Already have an account? <a routerLink="/auth/login">Login</a></div>
-
-
-</form> -->
-
 <section class="bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center">
     <div class="w-full max-w-md px-6 py-8 mx-auto">
         @if (isLoading) {<mat-progress-bar mode="indeterminate"></mat-progress-bar>}
         <div class="w-full bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700">
             <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                    Create an account
+                    Konto erstellen
                 </h1>
                 <form (submit)="submit()" class="space-y-4 md:space-y-6" [formGroup]="form">
                     <div>
@@ -84,40 +12,40 @@
                         </label>
                         <input formControlName="name" type="text" name="name" id="name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Full Name" required="" autocomplete="name">
+                            placeholder="Name" required="" autocomplete="name">
                         @if(
                         form.get('name')?.touched &&
                         form.get('name')?.errors
                         ){
                         @if(form.get('name')?.errors?.['required']){
-                        <small class="text-red-400">Name is required</small>
+                        <small class="text-red-400">Name ist erforderlich</small>
                         }
                         }
                     </div>
                     <div>
-                        <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your
-                            email</label>
+                        <label for="email"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                         <input formControlName="email" type="email" name="email" id="email"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="name@company.com" required="" autocomplete="email">
+                            placeholder="name@email.com" required="" autocomplete="email">
                         @if(
                         form.get('email')?.touched &&
                         form.get('email')?.errors
                         ){
                         @if(form.get('email')?.errors?.['required']){
-                        <small class="text-red-400">Email is required</small>
+                        <small class="text-red-400">Email ist erforderlich</small>
                         }
 
                         @if(form.get('email')?.errors?.['email']){
                         <small class="text-red-400">
-                            Email is invalid
+                            Email ist ungültig
                         </small>
                         }
                         }
                     </div>
                     <div>
                         <label for="password"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Passwort</label>
                         <input appPasswordToggle formControlName="password" type="password" name="password"
                             id="password" placeholder="••••••••"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -128,28 +56,29 @@
                         form.get('password')?.errors
                         ){
                         @if(form.get('password')?.errors?.['required']){
-                        <small class="text-red-400">Password is required</small>
+                        <small class="text-red-400">Password ist erforderlich</small>
                         }
 
                         @if(form.get('password')?.errors?.['minlength']){
                         <small class="text-red-400">
-                            Password must be at least {{
+                            Passwort muss mindestens {{
                             form.get('password')?.errors?.['minlength'].requiredLength
-                            }} characters.
+                            }} Zeichen lang sein.
                         </small> <br>
                         }
 
                         @if(form.get('password')?.errors?.['pattern']){
                         <small class="text-red-400">
-                            Password must contain at least one uppercase letter, one lowercase letter and one number.
+                            Passwort muss mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl
+                            enthalten.
                         </small>
                         }
                         }
                     </div>
                     <div>
                         <label for="confirm-password"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm
-                            Password</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Passwort
+                            best&auml;tigen</label>
                         <input appPasswordToggle formControlName="confirmPassword" type="password"
                             name="confirm-password" id="confirm-password" placeholder="••••••••"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -161,28 +90,28 @@
                         form.get('confirmPassword')?.errors
                         ){
                         @if(form.get('confirmPassword')?.errors?.['required']){
-                        <small class="text-red-400 line-clamp-1">Confirm Password is required</small>
+                        <small class="text-red-400 line-clamp-1">Passwort ist erforderlich</small>
                         }
 
                         @if(form.get('confirmPassword')?.errors?.['minlength']){
                         <small class="text-red-400">
-                            Confirm Password must be at least {{
+                            Passwort muss mindestens {{
                             form.get('confirmPassword')?.errors?.['minlength'].requiredLength
-                            }} characters.
+                            }} Zeichen lang sein.
                         </small> <br>
                         }
 
                         @if(form.get('confirmPassword')?.errors?.['pattern']){
                         <small class="text-red-400">
-                            Confirm Password must contain at least one uppercase letter, one lowercase letter and one
-                            number.
+                            Passwort muss mindestens einen Großbuchstaben, einen Kleinbuchstaben und eine Zahl
+                            enthalten.
                         </small> <br>
                         }
                         }
 
                         @if(form.errors?.['mismatch']){
                         <small class="text-red-400">
-                            Passwords do not match
+                            Passwörter stimmen nicht überein
                         </small>
                         }
 
@@ -206,11 +135,10 @@
                         'w-full text-white bg-primary-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center': true,
                         'hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800': form.valid,
                         'opacity-50 cursor-not-allowed': !form.valid
-                        }">Create
-                        an account</button>
+                        }">Registrieren</button>
                     <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                        Already have an account? <a routerLink="/auth/login"
-                            class="font-medium text-primary-600 hover:underline dark:text-primary-500">Login here</a>
+                        Bereits ein Konto? <a routerLink="/auth/login"
+                            class="font-medium text-primary-600 hover:underline dark:text-primary-500">Hier anmelden</a>
                     </p>
                 </form>
             </div>
