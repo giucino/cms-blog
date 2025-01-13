@@ -1,24 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ITag } from '../../../../core/interfaces/models/tag.model.interface';
-import { TagService } from '../../../../core/services/tag.service';
 import { ModalService } from '../../../../core/services/modal.service';
+import { TagService } from '../../../../core/services/tag.service';
 
 @Component({
   selector: 'app-tags-editor',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatCardModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './tag-editor.component.html',
   styleUrl: './tag-editor.component.scss',
 })
@@ -68,15 +59,15 @@ export class TagEditorComponent {
         id: parseInt(this.form.value.id!),
         name: this.form.value.name!,
       })
-      .subscribe({ next: 
-        () => {
-        this.modalService.showUpdated('Tag erfolgreich aktualisiert');
-        this.router.navigate(['/admin/tags']);
+      .subscribe({
+        next: () => {
+          this.modalService.showUpdated('Tag erfolgreich aktualisiert');
+          this.router.navigate(['/admin/tags']);
         },
         error: (error) => {
           this.modalService.showError('Fehler beim Aktualisieren des Tags');
           console.error('Update error:', error);
-        }
+        },
       });
   }
 }

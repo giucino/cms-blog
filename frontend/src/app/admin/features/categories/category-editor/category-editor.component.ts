@@ -1,10 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
 import { CategoryService } from '../../../../core/services/category.service';
 import { FlowbiteService } from '../../../../core/services/flowbite.service';
@@ -13,13 +10,7 @@ import { ModalService } from '../../../../core/services/modal.service';
 @Component({
   selector: 'app-category-editor',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatCardModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './category-editor.component.html',
   styleUrl: './category-editor.component.scss',
 })
@@ -30,7 +21,7 @@ export class CategoryEditorComponent implements OnInit {
   route = inject(ActivatedRoute);
   category: ICategory | undefined;
   flowbite = inject(FlowbiteService);
-  modalService = inject(ModalService)
+  modalService = inject(ModalService);
 
   form = this.fb.group({
     name: ['', Validators.required],
@@ -70,7 +61,7 @@ export class CategoryEditorComponent implements OnInit {
 
   update() {
     if (this.form.invalid) return;
-  
+
     this.categoryService
       .updateCategory({
         id: parseInt(this.form.value.id!),
@@ -82,9 +73,11 @@ export class CategoryEditorComponent implements OnInit {
           this.router.navigate(['/admin/categories']);
         },
         error: (error) => {
-          this.modalService.showError('Fehler beim Aktualisieren der Kategorie');
+          this.modalService.showError(
+            'Fehler beim Aktualisieren der Kategorie'
+          );
           console.error('Update error:', error);
-        }
+        },
       });
   }
 }

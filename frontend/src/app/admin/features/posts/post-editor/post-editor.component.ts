@@ -13,7 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
 import { IPost } from '../../../../core/interfaces/models/post.model.interface';
 import { ITag } from '../../../../core/interfaces/models/tag.model.interface';
@@ -35,6 +35,7 @@ import { TagService } from '../../../../core/services/tag.service';
     MatChipsModule,
     MatIconModule,
     CommonModule,
+    RouterModule,
   ],
   templateUrl: './post-editor.component.html',
   styleUrl: './post-editor.component.scss',
@@ -50,7 +51,6 @@ export class PostEditorComponent {
   post: IPost | undefined;
   categories: ICategory[] = [];
   tags: ITag[] = [];
-  showTagsDropdown = false;
 
   form = this.fb.group({
     title: ['', Validators.required],
@@ -116,12 +116,20 @@ export class PostEditorComponent {
       .addPost({
         title: this.form.value.title!,
         content: this.form.value.content!,
-        categoryId: this.form.value.categoryId!,
-        tagIds: this.form.value.tagIds as any[],
+        categoryId: Number(this.form.value.categoryId),
+        tagIds: this.form.value.tagIds as number[],
       })
-      .subscribe(() => {
-        this.modalService.showCreated('Post erfolgreich erstellt');
-        this.router.navigate(['/admin/posts']);
+      .subscribe({
+        next: () => {
+          this.modalService.showCreated('Post erfolgreich erstellt');
+          this.router.navigate(['/admin/posts']);
+          console.log(this.form.value);
+        },
+        error: (error) => {
+          this.modalService.showError('Fehler beim Erstellen des Posts');
+          console.log(this.form.value);
+
+        },
       });
   }
 
@@ -133,26 +141,39 @@ export class PostEditorComponent {
         id: parseInt(this.form.value.id!),
         title: this.form.value.title!,
         content: this.form.value.content!,
-        categoryId: this.form.value.categoryId!,
+        categoryId: Number(this.form.value.categoryId),
         tagIds: this.form.value.tagIds as any[],
       })
       .subscribe({
         next: () => {
           this.modalService.showUpdated('Post erfolgreich aktualisiert');
           this.router.navigate(['/admin/posts']);
+          console.log(this.form.value);
+
         },
         error: (error) => {
           this.modalService.showError('Fehler beim Aktualisieren des Posts');
           console.error('Update error:', error);
+          console.log(this.form.value);
+
         },
       });
   }
 
-  addTag(tagId: number) {
-    const tagIdsFormArray = this.form.get('tagIds') as FormArray;
-    tagIdsFormArray.push(this.fb.control(tagId));
-    // alert(JSON.stringify(tagId));
-    this.showTagsDropdown = false;
+  // addTag(tagId: number) {
+  //   const tagIdsFormArray = this.form.get('tagIds') as FormArray;
+  //   tagIdsFormArray.push(this.fb.control(tagId));
+  //   // alert(JSON.stringify(tagId));
+  //   this.showTagsDropdown = false;
+  // }
+
+  addTag(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const tagId = Number(selectElement.value); // Extrahiere die ausgewählte Tag-ID
+    if (!isNaN(tagId)) {
+      const tagIdsFormArray = this.form.get('tagIds') as FormArray;
+      tagIdsFormArray.push(this.fb.control(tagId));
+    }
   }
 
   removeTag(tagId: number) {
