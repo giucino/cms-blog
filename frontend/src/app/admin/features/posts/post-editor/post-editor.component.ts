@@ -36,9 +36,14 @@ export class PostEditorComponent {
   availableTags: ITag[] = [];
 
   form = this.fb.group({
-    title: ['', Validators.required],
+    title: [
+      '', 
+      [Validators.required, Validators.minLength(1), Validators.pattern(/\S/)]    
+    ],
     id: [''],
-    content: ['', Validators.required],
+    content: [
+      '', 
+      [Validators.required, Validators.minLength(1), Validators.pattern(/\S/)]    ],
     categoryId: [null, Validators.required],
     tagIds: this.fb.array([]),
   });

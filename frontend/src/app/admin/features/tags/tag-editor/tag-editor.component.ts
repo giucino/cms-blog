@@ -22,7 +22,10 @@ export class TagEditorComponent {
   tag: ITag | undefined;
 
   form = this.fb.group({
-    name: ['', Validators.required],
+    name: [
+      '', 
+      [Validators.required, Validators.minLength(1), Validators.pattern(/\S/)]
+    ],
     id: [''],
   });
 

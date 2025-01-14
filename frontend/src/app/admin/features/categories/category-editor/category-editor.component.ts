@@ -24,7 +24,10 @@ export class CategoryEditorComponent implements OnInit {
   modalService = inject(ModalService);
 
   form = this.fb.group({
-    name: ['', Validators.required],
+    name: [
+      '', 
+      [Validators.required, Validators.minLength(1), Validators.pattern(/\S/)]
+    ],
     id: [''],
   });
 
