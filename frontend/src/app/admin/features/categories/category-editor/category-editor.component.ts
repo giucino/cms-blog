@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
 import { CategoryService } from '../../../../core/services/category.service';
@@ -22,12 +22,17 @@ export class CategoryEditorComponent implements OnInit {
   category: ICategory | undefined;
   flowbite = inject(FlowbiteService);
   modalService = inject(ModalService);
+  maxLength = 20;
 
   form = this.fb.group({
     name: [
       '', 
-      [Validators.required, Validators.minLength(1), Validators.pattern(/\S/)]
-    ],
+      [
+        Validators.required, 
+        Validators.minLength(1), 
+        Validators.pattern(/\S/),
+        this.maxLengthValidator(this.maxLength)
+      ]    ],
     id: [''],
   });
 
@@ -45,6 +50,29 @@ export class CategoryEditorComponent implements OnInit {
         });
       }
     });
+  }
+
+  maxLengthValidator(max: number) {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      const value = control.value;
+      if (value && value.length > max) {
+        return { 'maxlength': true };
+      }
+      return null;
+    };
+  }
+
+  onInputChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.value.length > this.maxLength) {
+      input.value = input.value.slice(0, this.maxLength);
+      this.form.get('name')?.setValue(input.value);
+    }
+  }
+
+  getRemainingCharacters(): number {
+    const nameControl = this.form.get('name');
+    return this.maxLength - (nameControl?.value?.length || 0);
   }
 
   ngOnInit() {
