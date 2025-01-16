@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { MaxLengthDirective } from '../../../../core/directives/max-length.directive';
 import { ITag } from '../../../../core/interfaces/models/tag.model.interface';
 import { ModalService } from '../../../../core/services/modal.service';
 import { TagService } from '../../../../core/services/tag.service';
-import { MaxLengthDirective } from '../../../../core/directives/max-length.directive';
 
 @Component({
   selector: 'app-tags-editor',
@@ -52,11 +52,6 @@ export class TagEditorComponent {
     });
   }
 
-  getRemainingCharacters(): number {
-    const nameControl = this.form.get('name');
-    return this.maxLength - (nameControl?.value?.length || 0);
-  }
-
   create() {
     if (this.form.invalid) return;
 
@@ -84,5 +79,10 @@ export class TagEditorComponent {
           console.error('Update error:', error);
         },
       });
+  }
+
+  getRemainingCharacters(): number {
+    const nameControl = this.form.get('name');
+    return this.maxLength - (nameControl?.value?.length || 0);
   }
 }

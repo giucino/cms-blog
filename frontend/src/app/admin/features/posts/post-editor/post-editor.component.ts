@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { MaxLengthDirective } from '../../../../core/directives/max-length.directive';
 import { ICategory } from '../../../../core/interfaces/models/category.model.interface';
 import { IPost } from '../../../../core/interfaces/models/post.model.interface';
 import { ITag } from '../../../../core/interfaces/models/tag.model.interface';
@@ -18,7 +19,12 @@ import { TagService } from '../../../../core/services/tag.service';
 @Component({
   selector: 'app-post-editor',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    RouterModule,
+    MaxLengthDirective,
+  ],
   templateUrl: './post-editor.component.html',
   styleUrl: './post-editor.component.scss',
 })
@@ -34,16 +40,29 @@ export class PostEditorComponent {
   categories: ICategory[] = [];
   allTags: ITag[] = [];
   availableTags: ITag[] = [];
+  titleMaxLength = 70;
+  contentMaxLength = 4000;
 
   form = this.fb.group({
     title: [
-      '', 
-      [Validators.required, Validators.minLength(1), Validators.pattern(/\S/)]    
+      '',
+      [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.pattern(/\S/),
+        Validators.maxLength(this.titleMaxLength),
+      ],
     ],
     id: [''],
     content: [
-      '', 
-      [Validators.required, Validators.minLength(1), Validators.pattern(/\S/)]    ],
+      '',
+      [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.pattern(/\S/),
+        Validators.maxLength(this.contentMaxLength),
+      ],
+    ],
     categoryId: [null, Validators.required],
     tagIds: this.fb.array([]),
   });
@@ -178,5 +197,12 @@ export class PostEditorComponent {
       tagIdsFormArray.removeAt(index);
       this.updateAvailableTags();
     }
+  }
+
+  getRemainingCharacters(controlName: string): number {
+    const control = this.form.get(controlName);
+    const maxLength =
+      controlName === 'title' ? this.titleMaxLength : this.contentMaxLength;
+    return maxLength - (control?.value?.length || 0);
   }
 }

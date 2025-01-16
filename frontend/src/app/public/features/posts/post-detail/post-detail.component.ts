@@ -157,21 +157,22 @@ export class PostDetailComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit() {
-    this.postService.getPublicPosts({
-      categoryId: this.categoryId,
-      tagId: this.tagId,
-    }).subscribe({
-      next: (data) => {
-        this.posts = data;
-        this.updateFilteredPosts();
-      },
-      error: (error) => {
-        console.error('Error loading public post details:', error);
+    this.postService
+      .getPublicPosts({
+        categoryId: this.categoryId,
+        tagId: this.tagId,
+      })
+      .subscribe({
+        next: (data) => {
+          this.posts = data;
+          this.updateFilteredPosts();
+        },
+        error: (error) => {
+          console.error('Error loading public post details:', error);
           // Hier können Sie eine Fehlerbehandlung hinzufügen
         },
-      complete: () => {
-      }
-    });
+        complete: () => {},
+      });
   }
 
   private updateFilteredPosts(): void {

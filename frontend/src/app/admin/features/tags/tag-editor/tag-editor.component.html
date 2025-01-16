@@ -8,7 +8,7 @@
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                     {{form.value.id ? 'Aktualisiere ' : 'Erstelle neues '}}Tag
                 </h3>
-                <button type="button" [routerLink]="['/admin/tags']" 
+                <button type="button" [routerLink]="['/admin/tags']"
                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
                     <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg">
@@ -25,25 +25,24 @@
                     <div>
                         <label for="name"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                        <input formControlName="name" [appMaxLength]="maxLength" type="text" name="name" id="name" value="name" maxlength="20"
+                        <input formControlName="name" [appMaxLength]="maxLength" type="text" name="name" id="name"
+                            value="name" maxlength="20"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                             placeholder="Name">
                     </div>
                     <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
-                        <span>{{getRemainingCharacters()}} / {{maxLength}}</span>
-                        <!-- <span [textContent]="form.get('name')?.value?.length || 0"></span> / 20 Zeichen -->
+                        {{getRemainingCharacters()}} / {{maxLength}}
                     </p>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <button [disabled]="form.invalid" type="submit"
-                    [ngClass]="{
+                    <button [disabled]="form.invalid" type="submit" [ngClass]="{
                         'text-white bg-primary-600 font-medium rounded-lg text-sm px-5 py-2.5 text-center': true,
                         'hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800': form.valid,
                         'opacity-50 cursor-not-allowed': !form.valid
                         }">
                         {{form.value.id ? 'Aktualisieren' : 'Erstellen'}}
                     </button>
-                    <button type="button" [routerLink]="['/admin/tags']" 
+                    <button type="button" [routerLink]="['/admin/tags']"
                         class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                         Abbrechen
                     </button>
