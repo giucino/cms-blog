@@ -43,7 +43,7 @@ testem.log
 Thumbs.db
 
 # Frontend
-src/app/public/shared/directives/copypassword-toggle.directive.ts
+src/app/core/directives/copypassword-toggle.directive.ts
 src/app/core/services/dark-mode.service.ts
 src/app/core/services/postcopy.service.ts
 src/app/admin/features/categories/categories-list/copycategories-list.component.ts

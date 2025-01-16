@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
-import { PasswordToggleDirective } from '../../../shared/directives/password-toggle.directive';
+import { PasswordToggleDirective } from '../../../../core/directives/password-toggle.directive';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 function matchPassword(): ValidatorFn {

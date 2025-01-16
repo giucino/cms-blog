@@ -30,7 +30,7 @@
                             placeholder="Titel">
                         <p *ngIf="form.get('title')?.invalid && form.get('title')?.touched"
                             class="mt-2 mb-0 text-sm text-red-600 dark:text-red-500">
-                            Einen gültigen Titel eingeben
+                            Bitte gültigen Titel eingeben
                         </p>
                         <p class="mt-2 mb-0 text-sm text-gray-500 dark:text-gray-400">
                             <span [textContent]="form.get('title')?.value?.length || 0"></span> / 70 Zeichen

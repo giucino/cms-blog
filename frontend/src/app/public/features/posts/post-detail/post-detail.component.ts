@@ -18,7 +18,7 @@ import { CommentService } from '../../../../core/services/comment.service';
 import { FlowbiteService } from '../../../../core/services/flowbite.service';
 import { PostService } from '../../../../core/services/post.service';
 import { TagService } from '../../../../core/services/tag.service';
-import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
+import { TruncatePipe } from '../../../../core/pipes/truncate.pipe';
 
 @Component({
   selector: 'app-post-detail',

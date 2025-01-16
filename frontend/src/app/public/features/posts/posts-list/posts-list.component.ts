@@ -5,7 +5,7 @@ import moment from 'moment';
 import 'moment/locale/de';
 import { IPost } from '../../../../core/interfaces/models/post.model.interface';
 import { PostService } from '../../../../core/services/post.service';
-import { TruncatePipe } from '../../../shared/pipes/truncate.pipe';
+import { TruncatePipe } from '../../../../core/pipes/truncate.pipe';
 
 @Component({
   selector: 'app-posts-list',

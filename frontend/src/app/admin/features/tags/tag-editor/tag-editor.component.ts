@@ -5,11 +5,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ITag } from '../../../../core/interfaces/models/tag.model.interface';
 import { ModalService } from '../../../../core/services/modal.service';
 import { TagService } from '../../../../core/services/tag.service';
+import { MaxLengthDirective } from '../../../../core/directives/max-length.directive';
 
 @Component({
   selector: 'app-tags-editor',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, MaxLengthDirective],
   templateUrl: './tag-editor.component.html',
   styleUrl: './tag-editor.component.scss',
 })
@@ -20,11 +21,17 @@ export class TagEditorComponent {
   route = inject(ActivatedRoute);
   modalService = inject(ModalService);
   tag: ITag | undefined;
+  maxLength = 20;
 
   form = this.fb.group({
     name: [
-      '', 
-      [Validators.required, Validators.minLength(1), Validators.pattern(/\S/)]
+      '',
+      [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.pattern(/\S/),
+        Validators.maxLength(this.maxLength),
+      ],
     ],
     id: [''],
   });
@@ -43,6 +50,11 @@ export class TagEditorComponent {
         });
       }
     });
+  }
+
+  getRemainingCharacters(): number {
+    const nameControl = this.form.get('name');
+    return this.maxLength - (nameControl?.value?.length || 0);
   }
 
   create() {
