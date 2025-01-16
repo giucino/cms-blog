@@ -79,7 +79,7 @@ export const loginController = async (req: Request, res: Response) => {
   const user = await getUserByEmail(email);
 
   if (!user) {
-    res.status(400).json({ message: "User not found." });
+    res.status(400).json({ message: "User nicht gefunden." });
     return;
   }
 
@@ -91,7 +91,7 @@ export const loginController = async (req: Request, res: Response) => {
   const dbPassword = verifyToken(user.password!);
 
   if (dbPassword !== password) {
-    res.status(400).json({ message: "Invalid password." });
+    res.status(400).json({ message: "Falsches Passwort." });
     return;
   }
 
@@ -252,7 +252,7 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
   const user = await getUserByEmail(email);
 
   if (!user) {
-    res.status(400).json({ message: "User not found." });
+    res.status(400).json({ message: "User nicht gefunden." });
     return;
   }
 

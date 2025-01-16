@@ -41,17 +41,17 @@
                         <label for="category"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kategorie
                             auswählen</label>
-                        <select formControlName="categoryId" placeholder="Kategorie auswählen"
+                        <select formControlName="categoryId"
                             class="focus:outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
                             <option value="">Kategorie auswählen</option>
                             @for(category of categories; track category.id){
                             <option [value]="category.id">{{category.name}}</option>
                             }
                         </select>
-                        <p *ngIf="form.get('categoryId')?.invalid && form.get('categoryId')?.touched"
+                        <!-- <p *ngIf="form.get('categoryId')?.invalid && form.get('categoryId')?.touched"
                             class="mt-2 mb-0 text-sm text-red-600 dark:text-red-500">
                             Bitte eine Kategorie auswählen.
-                        </p>
+                        </p> -->
                     </div>
 
                     <div class="sm:col-span-2">
